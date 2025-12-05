@@ -66,9 +66,11 @@ obj/
 logs/
 
 # Whisper models (模型文件太大，不提交)
-*.onnx
 *.bin
 *.pt
+
+# 但允许assets目录下的必需模型文件
+!app/src/main/assets/*.onnx
 
 # Temp
 *.tmp

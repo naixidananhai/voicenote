@@ -25,6 +25,15 @@ jobs:
     - name: 授予Gradle执行权限
       run: chmod +x gradlew
 
+    - name: 下载Whisper模型
+      run: |
+        mkdir -p app/src/main/assets
+        echo "下载 ggml-base.bin 模型..."
+        curl -L -o app/src/main/assets/ggml-base.bin \
+          https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
+        echo "模型下载完成，验证文件大小..."
+        ls -lh app/src/main/assets/
+
     - name: 构建Debug APK
       run: ./gradlew assembleDebug --stacktrace
 
