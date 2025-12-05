@@ -119,7 +119,7 @@ fun MainScreen(
         uiState.storageInfo?.let { storage ->
             StorageCard(
                 availableMB = storage.availableSpaceMB,
-                usedMB = storage.usedMB,
+                usedMB = storage.usedSpaceMB,
                 hasEnoughSpace = storage.hasEnoughSpace,
                 onCleanup = { viewModel.performCleanup() }
             )
