@@ -1,3 +1,5 @@
+# GitHub Actions workflow for building Android APK
+# Triggers on push to master/main, pull requests, and manual dispatch
 name: Android CI - Build APK
 
 on:
