@@ -5,61 +5,61 @@ on:
     branches: [ feature/voice-assistant-impl, main, master ]
   pull_request:
     branches: [ feature/voice-assistant-impl, main, master ]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 检出代码
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: 设置JDK 17
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: gradle
 
-    - name: 授予Gradle执行权限
+    - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: 下载Whisper模型
+    - name: Download Whisper model
       run: |
         mkdir -p app/src/main/assets
-        echo "下载 ggml-base.bin 模型..."
+        echo "Downloading ggml-base.bin model..."
         curl -L -o app/src/main/assets/ggml-base.bin \
           https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin
-        echo "模型下载完成，验证文件大小..."
+        echo "Model downloaded, checking file size..."
         ls -lh app/src/main/assets/
 
-    - name: 构建Debug APK
+    - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
 
-    - name: 构建Release APK
+    - name: Build Release APK
       run: ./gradlew assembleRelease --stacktrace
 
-    - name: 上传Debug APK
+    - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
 
-    - name: 上传Release APK
+    - name: Upload Release APK
       uses: actions/upload-artifact@v4
       with:
         name: app-release-unsigned
         path: app/build/outputs/apk/release/app-release-unsigned.apk
 
-    - name: 生成构建信息
+    - name: Generate build info
       run: |
-        echo "构建时间: $(date)" > build-info.txt
-        echo "分支: ${{ github.ref_name }}" >> build-info.txt
-        echo "提交: ${{ github.sha }}" >> build-info.txt
-        echo "触发者: ${{ github.actor }}" >> build-info.txt
+        echo "Build time: $(date)" > build-info.txt
+        echo "Branch: ${{ github.ref_name }}" >> build-info.txt
+        echo "Commit: ${{ github.sha }}" >> build-info.txt
+        echo "Actor: ${{ github.actor }}" >> build-info.txt
 
-    - name: 上传构建信息
+    - name: Upload build info
       uses: actions/upload-artifact@v4
       with:
         name: build-info
