@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.VoiceLifeAssistant" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- 使用Material3主题配合Jetpack Compose -->
+    <style name="Theme.VoiceLifeAssistant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- 状态栏颜色 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- 导航栏颜色 -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

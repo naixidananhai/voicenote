@@ -2,6 +2,7 @@ package com.voicelife.assistant.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.voicelife.assistant.data.model.Recording
 import com.voicelife.assistant.data.model.Transcription
 
@@ -10,6 +11,7 @@ import com.voicelife.assistant.data.model.Transcription
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recordingDao(): RecordingDao
     abstract fun transcriptionDao(): TranscriptionDao
