@@ -29,7 +29,8 @@ import java.io.File
  */
 class AudioRecorder(
     private val context: Context,
-    private val recordingsDir: File
+    private val recordingsDir: File,
+    private val debugLogger: com.voicelife.assistant.utils.DebugLogger? = null
 ) {
     private var vadDetector: VadDetector? = null
     private var recordingSession: RecordingSession? = null
@@ -63,16 +64,19 @@ class AudioRecorder(
     private val vadCallback = object : VadCallback {
         override fun onVoiceStart() {
             Log.d(TAG, "VAD: Voice detected")
+            debugLogger?.i(TAG, "🎤 检测到人声，开始录音")
             recordingSession?.onVoiceStart()
         }
 
         override fun onVoiceEnd() {
             Log.d(TAG, "VAD: Voice ended")
+            debugLogger?.i(TAG, "🔇 人声结束，等待静音确认...")
             recordingSession?.onVoiceEnd()
         }
 
         override fun onError(error: Exception) {
             Log.e(TAG, "VAD error", error)
+            debugLogger?.e(TAG, "VAD错误: ${error.message}")
             // 可以在这里添加错误处理逻辑
         }
     }
@@ -82,6 +86,7 @@ class AudioRecorder(
      */
     fun init() {
         try {
+            debugLogger?.d(TAG, "初始化录制器...")
             // 创建目录结构
             File(recordingsDir, "pending").mkdirs()
             File(recordingsDir, "processing").mkdirs()
@@ -91,6 +96,7 @@ class AudioRecorder(
             // 初始化VAD检测器
             vadDetector = VadDetector(context, vadCallback)
             vadDetector?.init()
+            debugLogger?.d(TAG, "VAD检测器初始化完成")
 
             // 初始化AudioRecord
             audioRecord = AudioRecord(
@@ -106,8 +112,10 @@ class AudioRecorder(
             }
 
             Log.d(TAG, "Audio recorder initialized")
+            debugLogger?.i(TAG, "录制器初始化成功 (16kHz, MONO)")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize audio recorder", e)
+            debugLogger?.e(TAG, "录制器初始化失败: ${e.message}")
             throw e
         }
     }
@@ -119,32 +127,34 @@ class AudioRecorder(
     fun start(onComplete: (File) -> Unit) {
         if (isRecording) {
             Log.w(TAG, "Audio recorder already running")
+            debugLogger?.w(TAG, "录制器已在运行")
             return
         }
 
         try {
+            debugLogger?.i(TAG, "启动录制器...")
             this.onRecordingComplete = onComplete
 
             // 创建录音会话
-            recordingSession = RecordingSession(recordingsDir) { file ->
+            recordingSession = RecordingSession(recordingsDir, debugLogger) { file ->
                 onRecordingComplete?.invoke(file)
             }
 
             // 启动音频录制
             audioRecord?.startRecording()
             isRecording = true
+            debugLogger?.d(TAG, "AudioRecord已启动")
 
             // 启动音频读取协程
             audioRecordJob = CoroutineScope(Dispatchers.IO).launch {
                 readAudioData()
             }
 
-            // 启动VAD检测
-            vadDetector?.start()
-
+            debugLogger?.i(TAG, "VAD检测已启动，监听中...")
             Log.d(TAG, "Audio recorder started")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start audio recorder", e)
+            debugLogger?.e(TAG, "启动录制器失败: ${e.message}")
             isRecording = false
             throw e
         }
@@ -157,6 +167,9 @@ class AudioRecorder(
     private suspend fun readAudioData() {
         val audioBuffer = ShortArray(frameSize)
         val floatBuffer = FloatArray(frameSize)
+        var frameCount = 0
+
+        debugLogger?.d(TAG, "开始读取音频数据...")
 
         while (isRecording && audioRecord != null) {
             try {
@@ -164,14 +177,33 @@ class AudioRecorder(
                 val readSize = audioRecord!!.read(audioBuffer, 0, frameSize)
                 if (readSize <= 0) {
                     Log.w(TAG, "AudioRecord read returned: $readSize")
+                    debugLogger?.w(TAG, "音频读取失败: $readSize")
                     delay(10)
                     continue
+                }
+
+                frameCount++
+                
+                // 每100帧输出一次日志
+                if (frameCount % 100 == 0) {
+                    debugLogger?.d(TAG, "已处理 $frameCount 帧音频")
                 }
 
                 // 转换为float给VAD使用
                 for (i in 0 until readSize) {
                     floatBuffer[i] = audioBuffer[i] / 32768.0f
                 }
+
+                // 送给VAD检测
+                val probability = vadDetector?.processFrame(floatBuffer) ?: 0f
+                
+                // 每50帧输出一次VAD概率
+                if (frameCount % 50 == 0) {
+                    debugLogger?.d(TAG, "VAD概率: ${String.format("%.3f", probability)}")
+                }
+                
+                // 根据VAD结果触发回调
+                vadDetector?.handleVadResult(probability)
 
                 // 写入录音会话(始终写入,用于预缓冲)
                 recordingSession?.writeAudioData(audioBuffer)
@@ -180,11 +212,13 @@ class AudioRecorder(
                 break
             } catch (e: Exception) {
                 Log.e(TAG, "Error reading audio data", e)
+                debugLogger?.e(TAG, "读取音频错误: ${e.message}")
                 delay(100)
             }
         }
 
         Log.d(TAG, "Audio reading stopped")
+        debugLogger?.i(TAG, "音频读取已停止，共处理 $frameCount 帧")
     }
 
     /**
@@ -207,8 +241,8 @@ class AudioRecorder(
             Log.e(TAG, "Error stopping AudioRecord", e)
         }
 
-        // 停止VAD检测
-        vadDetector?.stop()
+        // 重置VAD状态
+        vadDetector?.reset()
 
         // 强制停止当前录音
         recordingSession?.forceStop()

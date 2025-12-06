@@ -26,13 +26,17 @@ class MainViewModel @Inject constructor(
     application: Application,
     private val permissionManager: PermissionManager,
     private val recordingRepository: RecordingRepository,
-    private val storageManager: StorageManager
+    private val storageManager: StorageManager,
+    private val debugLogger: com.voicelife.assistant.utils.DebugLogger
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
+    val logs: StateFlow<List<com.voicelife.assistant.utils.LogEntry>> = debugLogger.logs
+
     init {
+        debugLogger.i("MainViewModel", "应用启动")
         loadData()
     }
 
@@ -42,26 +46,35 @@ class MainViewModel @Inject constructor(
     fun loadData() {
         viewModelScope.launch {
             try {
+                debugLogger.i("MainViewModel", "开始加载数据...")
                 _uiState.value = _uiState.value.copy(isLoading = true)
 
                 // 加载录音统计
                 val stats = recordingRepository.getStatistics()
+                debugLogger.d("MainViewModel", "录音统计: ${stats.totalCount}条")
 
                 // 加载存储信息
                 val storage = storageManager.getStorageInfo()
+                debugLogger.d("MainViewModel", "存储空间: ${storage.availableSpaceMB}MB可用")
 
                 // 检查权限
                 val hasPermissions = permissionManager.hasAllRequiredPermissions()
                 val missingPermissions = permissionManager.getMissingPermissions()
+                debugLogger.i("MainViewModel", "权限检查: ${if (hasPermissions) "已授予" else "缺少${missingPermissions.size}个权限"}")
+
+                // 获取录音文件路径
+                val recordingsPath = storageManager.getRecordingsDir().absolutePath
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     statistics = stats,
                     storageInfo = storage,
                     hasAllPermissions = hasPermissions,
-                    missingPermissions = missingPermissions
+                    missingPermissions = missingPermissions,
+                    recordingsPath = recordingsPath
                 )
             } catch (e: Exception) {
+                debugLogger.e("MainViewModel", "加载数据失败: ${e.message}")
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = e.message
@@ -74,7 +87,9 @@ class MainViewModel @Inject constructor(
      * 启动服务
      */
     fun startService() {
+        debugLogger.i("MainViewModel", "尝试启动服务...")
         if (!permissionManager.hasAllRequiredPermissions()) {
+            debugLogger.w("MainViewModel", "权限不足，无法启动服务")
             _uiState.value = _uiState.value.copy(
                 showPermissionDialog = true
             )
@@ -84,6 +99,7 @@ class MainViewModel @Inject constructor(
         val intent = Intent(getApplication(), VoiceMonitorService::class.java)
         VoiceMonitorService.startService(intent)
         getApplication<Application>().startForegroundService(intent)
+        debugLogger.i("MainViewModel", "服务启动命令已发送")
 
         _uiState.value = _uiState.value.copy(isServiceRunning = true)
     }
@@ -92,11 +108,68 @@ class MainViewModel @Inject constructor(
      * 停止服务
      */
     fun stopService() {
+        debugLogger.i("MainViewModel", "停止服务...")
         val intent = Intent(getApplication(), VoiceMonitorService::class.java)
         VoiceMonitorService.stopService(intent)
         getApplication<Application>().startService(intent)
+        debugLogger.i("MainViewModel", "服务停止命令已发送")
 
         _uiState.value = _uiState.value.copy(isServiceRunning = false)
+    }
+
+    /**
+     * 清空日志
+     */
+    fun clearLogs() {
+        debugLogger.clear()
+        debugLogger.i("MainViewModel", "日志已清空")
+    }
+
+    /**
+     * 打开录音文件夹
+     */
+    fun openRecordingsFolder() {
+        viewModelScope.launch {
+            try {
+                val recordingsDir = storageManager.getRecordingsDir()
+                debugLogger.i("MainViewModel", "📁 录音文件夹:")
+                debugLogger.i("MainViewModel", recordingsDir.absolutePath)
+                
+                // 列出所有录音文件
+                val pendingFiles = File(recordingsDir, "pending").listFiles()?.toList() ?: emptyList()
+                val processingFiles = File(recordingsDir, "processing").listFiles()?.toList() ?: emptyList()
+                val completedFiles = File(recordingsDir, "completed").listFiles()?.toList() ?: emptyList()
+                val failedFiles = File(recordingsDir, "failed").listFiles()?.toList() ?: emptyList()
+                
+                debugLogger.i("MainViewModel", "📊 文件统计:")
+                debugLogger.i("MainViewModel", "  待处理: ${pendingFiles.size}个")
+                debugLogger.i("MainViewModel", "  处理中: ${processingFiles.size}个")
+                debugLogger.i("MainViewModel", "  已完成: ${completedFiles.size}个")
+                debugLogger.i("MainViewModel", "  失败: ${failedFiles.size}个")
+                
+                // 列出最近的5个文件
+                val allFiles = (pendingFiles + processingFiles + completedFiles + failedFiles)
+                    .sortedByDescending { it.lastModified() }
+                
+                if (allFiles.isNotEmpty()) {
+                    debugLogger.i("MainViewModel", "📝 最近的文件:")
+                    allFiles.take(5).forEach { file ->
+                        val sizeKB = file.length() / 1024
+                        val folder = file.parentFile?.name ?: ""
+                        debugLogger.d("MainViewModel", "  [$folder] ${file.name} (${sizeKB}KB)")
+                    }
+                    
+                    // 显示adb命令
+                    debugLogger.i("MainViewModel", "💻 使用adb获取文件:")
+                    debugLogger.i("MainViewModel", "adb pull ${recordingsDir.absolutePath} .")
+                } else {
+                    debugLogger.w("MainViewModel", "⚠️ 文件夹为空，还没有录音")
+                }
+                
+            } catch (e: Exception) {
+                debugLogger.e("MainViewModel", "打开文件夹失败: ${e.message}")
+            }
+        }
     }
 
     /**
@@ -176,5 +249,6 @@ data class MainUiState(
     val missingPermissions: List<com.voicelife.assistant.utils.PermissionInfo> = emptyList(),
     val showPermissionDialog: Boolean = false,
     val error: String? = null,
-    val cleanupMessage: String? = null
+    val cleanupMessage: String? = null,
+    val recordingsPath: String? = null
 )

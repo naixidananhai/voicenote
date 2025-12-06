@@ -19,6 +19,7 @@ import java.util.*
  */
 class RecordingSession(
     private val recordingsDir: File,
+    private val debugLogger: com.voicelife.assistant.utils.DebugLogger? = null,
     private val onRecordingComplete: (File) -> Unit
 ) {
     private var wavWriter: WavFileWriter? = null
@@ -47,6 +48,7 @@ class RecordingSession(
             lastVoiceTime = System.currentTimeMillis()
             silenceCheckJob?.cancel()
             Log.d(TAG, "Voice continues, silence check cancelled")
+            debugLogger?.d(TAG, "人声继续，取消静音检查")
             return
         }
 
@@ -66,6 +68,7 @@ class RecordingSession(
 
         lastVoiceTime = System.currentTimeMillis()
         Log.d(TAG, "Recording started: ${currentFile?.name}")
+        debugLogger?.i(TAG, "📝 开始录音: ${currentFile?.name}")
     }
 
     /**
@@ -93,10 +96,12 @@ class RecordingSession(
             delay(silenceGapMs)
 
             // 10秒后仍无人声,停止录音
+            debugLogger?.i(TAG, "⏱️ 静音超过10秒，准备停止录音")
             stopRecording()
         }
 
         Log.d(TAG, "Voice ended, silence check started")
+        debugLogger?.d(TAG, "人声结束，启动10秒静音检查")
     }
 
     /**
@@ -108,6 +113,7 @@ class RecordingSession(
         val writer = wavWriter ?: return
 
         Log.d(TAG, "Stopping recording...")
+        debugLogger?.i(TAG, "⏹️ 停止录音，录制后缓冲3秒...")
 
         // 继续录制后缓冲(3秒)
         postBufferJob?.cancel()
@@ -119,7 +125,10 @@ class RecordingSession(
             wavWriter = null
 
             val duration = calculateDuration(file)
+            val sizeKB = file.length() / 1024
             Log.d(TAG, "Recording completed: ${file.name}, size: ${file.length()} bytes, duration: ${duration}s")
+            debugLogger?.i(TAG, "✨ 录音完成: ${file.name}")
+            debugLogger?.d(TAG, "  时长: ${duration}秒, 大小: ${sizeKB}KB")
 
             // 通知录音完成
             onRecordingComplete(file)

@@ -7,15 +7,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.voicelife.assistant.ui.viewmodel.MainViewModel
+import com.voicelife.assistant.utils.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -76,14 +83,19 @@ fun MainScreen(
     onRequestPermissions: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val logs by viewModel.logs.collectAsState()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
+        // 上半部分：控制面板（可滚动）
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
         // 标题
         Text(
             text = "VoiceLife 语音助手",
@@ -111,7 +123,8 @@ fun MainScreen(
                 totalCount = stats.totalCount,
                 totalDuration = stats.getTotalDurationMinutes(),
                 pendingCount = stats.pendingCount,
-                totalSize = stats.getTotalSizeMB()
+                totalSize = stats.getTotalSizeMB(),
+                onRefresh = { viewModel.loadData() }
             )
         }
 
@@ -121,7 +134,9 @@ fun MainScreen(
                 availableMB = storage.availableSpaceMB,
                 usedMB = storage.usedSpaceMB,
                 hasEnoughSpace = storage.hasEnoughSpace,
-                onCleanup = { viewModel.performCleanup() }
+                recordingsPath = uiState.recordingsPath,
+                onCleanup = { viewModel.performCleanup() },
+                onOpenFolder = { viewModel.openRecordingsFolder() }
             )
         }
 
@@ -139,29 +154,39 @@ fun MainScreen(
             }
         }
 
-        // 错误消息
-        uiState.error?.let { error ->
-            Snackbar(
-                modifier = Modifier.padding(8.dp),
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                action = {
-                    TextButton(onClick = { viewModel.clearError() }) {
-                        Text("确定")
+            // 错误消息
+            uiState.error?.let { error ->
+                Snackbar(
+                    modifier = Modifier.padding(8.dp),
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    action = {
+                        TextButton(onClick = { viewModel.clearError() }) {
+                            Text("确定")
+                        }
                     }
+                ) {
+                    Text(error)
                 }
-            ) {
-                Text(error)
             }
         }
-    }
 
-    // 加载指示器
-    if (uiState.isLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+        // 下半部分：实时日志（固定高度）
+        DebugLogCard(
+            logs = logs,
+            onClear = { viewModel.clearLogs() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+        )
+
+        // 加载指示器
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
@@ -274,22 +299,41 @@ fun StatisticsCard(
     totalCount: Int,
     totalDuration: Int,
     pendingCount: Int,
-    totalSize: Long
+    totalSize: Long,
+    onRefresh: () -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "录音统计",
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "录音统计",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                TextButton(onClick = onRefresh) {
+                    Text("🔄 刷新")
+                }
+            }
 
             StatRow("总录音数", "$totalCount 段")
             StatRow("总时长", "$totalDuration 分钟")
             StatRow("待处理", "$pendingCount 个")
             StatRow("占用空间", "$totalSize MB")
+            
+            if (totalCount == 0) {
+                Text(
+                    text = "💡 提示：开始监听并说话后，录音会自动保存",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
     }
 }
@@ -302,7 +346,9 @@ fun StorageCard(
     availableMB: Long,
     usedMB: Long,
     hasEnoughSpace: Boolean,
-    onCleanup: () -> Unit
+    recordingsPath: String?,
+    onCleanup: () -> Unit,
+    onOpenFolder: () -> Unit
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -317,6 +363,16 @@ fun StorageCard(
             StatRow("可用空间", "$availableMB MB")
             StatRow("已使用", "$usedMB MB")
 
+            // 显示录音文件路径
+            recordingsPath?.let { path ->
+                Text(
+                    text = "📁 $path",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+
             if (!hasEnoughSpace) {
                 Text(
                     text = "⚠️ 存储空间不足500MB",
@@ -325,11 +381,23 @@ fun StorageCard(
                 )
             }
 
-            Button(
-                onClick = onCleanup,
-                modifier = Modifier.fillMaxWidth()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("清理过期文件")
+                Button(
+                    onClick = onOpenFolder,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("打开文件夹")
+                }
+                
+                Button(
+                    onClick = onCleanup,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("清理过期")
+                }
             }
         }
     }
@@ -352,6 +420,94 @@ fun StatRow(label: String, value: String) {
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
+/**
+ * 调试日志卡片
+ */
+@Composable
+fun DebugLogCard(
+    logs: List<com.voicelife.assistant.utils.LogEntry>,
+    onClear: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF1E1E1E)
+        )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // 标题栏
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "🔍 实时日志 (${logs.size})",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White
+                )
+                TextButton(onClick = onClear) {
+                    Text("清空", color = Color(0xFF64B5F6))
+                }
+            }
+
+            Divider(color = Color(0xFF424242))
+
+            // 日志列表
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF1E1E1E))
+                    .padding(8.dp),
+                reverseLayout = false
+            ) {
+                items(logs) { log ->
+                    LogItem(log)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 单条日志
+ */
+@Composable
+fun LogItem(log: com.voicelife.assistant.utils.LogEntry) {
+    val color = when (log.level) {
+        LogLevel.DEBUG -> Color(0xFF9E9E9E)
+        LogLevel.INFO -> Color(0xFF64B5F6)
+        LogLevel.WARN -> Color(0xFFFFB74D)
+        LogLevel.ERROR -> Color(0xFFE57373)
+    }
+
+    val icon = when (log.level) {
+        LogLevel.DEBUG -> "🔹"
+        LogLevel.INFO -> "ℹ️"
+        LogLevel.WARN -> "⚠️"
+        LogLevel.ERROR -> "❌"
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp)
+    ) {
+        Text(
+            text = "${log.timestamp} $icon [${log.tag}] ${log.message}",
+            fontSize = 11.sp,
+            fontFamily = FontFamily.Monospace,
+            color = color,
+            lineHeight = 14.sp
         )
     }
 }

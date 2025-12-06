@@ -43,6 +43,9 @@ class VoiceMonitorService : Service() {
     @Inject
     lateinit var storageManager: StorageManager
 
+    @Inject
+    lateinit var debugLogger: com.voicelife.assistant.utils.DebugLogger
+
     private var audioRecorder: AudioRecorder? = null
     private val serviceScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
@@ -66,20 +69,25 @@ class VoiceMonitorService : Service() {
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "Service created")
+        debugLogger.i(TAG, "服务创建")
 
         // 初始化存储管理器
         storageManager.init()
+        debugLogger.d(TAG, "存储管理器初始化完成")
 
         // 初始化音频录制器
         audioRecorder = AudioRecorder(
             context = applicationContext,
-            recordingsDir = storageManager.getRecordingsDir()
+            recordingsDir = storageManager.getRecordingsDir(),
+            debugLogger = debugLogger
         )
 
         try {
             audioRecorder?.init()
+            debugLogger.i(TAG, "音频录制器初始化成功")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize audio recorder", e)
+            debugLogger.e(TAG, "音频录制器初始化失败: ${e.message}")
             notificationHelper.showWarningNotification(WarningType.PERMISSION_LOST)
         }
     }
@@ -100,20 +108,25 @@ class VoiceMonitorService : Service() {
      * 开始监听
      */
     private fun startMonitoring() {
+        debugLogger.i(TAG, "开始监听...")
+        
         // 检查存储空间
         if (!storageManager.hasEnoughSpace()) {
             Log.w(TAG, "Insufficient storage space")
+            debugLogger.w(TAG, "存储空间不足")
             notificationHelper.showWarningNotification(WarningType.STORAGE_LOW)
         }
 
         // 启动前台服务
         val notification = notificationHelper.createServiceNotification(ServiceState.Idle)
         startForeground(notificationHelper.getNotificationId(), notification)
+        debugLogger.d(TAG, "前台服务已启动")
 
         // 启动音频录制器
         audioRecorder?.start { file ->
             onRecordingComplete(file)
         }
+        debugLogger.i(TAG, "音频录制器已启动，等待人声...")
 
         // 启动通知更新
         startNotificationUpdater()
@@ -147,15 +160,22 @@ class VoiceMonitorService : Service() {
     private fun onRecordingComplete(file: File) {
         serviceScope.launch {
             try {
+                debugLogger.i(TAG, "💾 录音完成，正在保存...")
+                
                 // 保存到数据库
                 val recordingId = recordingRepository.saveRecording(file)
+                val sizeKB = file.length() / 1024
+                
                 Log.d(TAG, "Recording saved: $recordingId, file: ${file.name}")
+                debugLogger.i(TAG, "✅ 已保存: ${file.name} (${sizeKB}KB)")
+                debugLogger.d(TAG, "录音ID: $recordingId")
 
                 // TODO: Phase 4 - 将录音加入转换队列
                 // transcriptionScheduler.enqueue(recordingId)
 
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to save recording", e)
+                debugLogger.e(TAG, "保存录音失败: ${e.message}")
             }
         }
     }

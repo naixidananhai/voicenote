@@ -25,20 +25,7 @@ class VadDetector(
     private val context: Context,
     private val callback: VadCallback
 ) {
-    private var audioRecord: AudioRecord? = null
     private var vadEngine: SileroVadEngine? = null
-
-    private var isRunning = false
-    private var detectionJob: Job? = null
-
-    // 音频参数
-    private val sampleRate = 16000
-    private val frameSize = 512  // 每帧512样本 = 32ms
-    private val bufferSize = AudioRecord.getMinBufferSize(
-        sampleRate,
-        AudioFormat.CHANNEL_IN_MONO,
-        AudioFormat.ENCODING_PCM_16BIT
-    ).coerceAtLeast(frameSize * 4)
 
     // VAD参数
     private val voiceThreshold = 0.5f  // 人声概率阈值
@@ -56,7 +43,6 @@ class VadDetector(
 
     /**
      * 初始化检测器
-     * @throws SecurityException 如果缺少录音权限
      * @throws Exception 如果VAD引擎初始化失败
      */
     fun init() {
@@ -65,24 +51,7 @@ class VadDetector(
             vadEngine = SileroVadEngine(context)
             vadEngine?.init()
 
-            // 初始化AudioRecord
-            audioRecord = AudioRecord(
-                MediaRecorder.AudioSource.VOICE_RECOGNITION,
-                sampleRate,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                bufferSize
-            )
-
-            if (audioRecord?.state != AudioRecord.STATE_INITIALIZED) {
-                throw IllegalStateException("AudioRecord initialization failed")
-            }
-
-            Log.d(TAG, "VAD Detector initialized (buffer size: $bufferSize)")
-        } catch (e: SecurityException) {
-            Log.e(TAG, "Missing RECORD_AUDIO permission", e)
-            callback.onError(e)
-            throw e
+            Log.d(TAG, "VAD Detector initialized")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize VAD Detector", e)
             callback.onError(e)
@@ -91,77 +60,24 @@ class VadDetector(
     }
 
     /**
-     * 开始检测
+     * 处理音频帧
+     * 由外部AudioRecorder调用
      */
-    fun start() {
-        if (isRunning) {
-            Log.w(TAG, "VAD detection already running")
-            return
-        }
-
-        try {
-            audioRecord?.startRecording()
-            isRunning = true
-
-            detectionJob = CoroutineScope(Dispatchers.IO).launch {
-                detectVoiceActivity()
-            }
-
-            Log.d(TAG, "VAD detection started")
+    fun processFrame(audioFrame: FloatArray): Float {
+        return try {
+            vadEngine?.process(audioFrame) ?: 0f
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to start VAD detection", e)
-            callback.onError(e)
+            Log.e(TAG, "Error processing frame", e)
+            0f
         }
     }
 
     /**
-     * 检测循环
+     * 处理VAD结果
+     * 由外部AudioRecorder调用
      */
-    private suspend fun detectVoiceActivity() {
-        val audioBuffer = ShortArray(frameSize)
-        val floatBuffer = FloatArray(frameSize)
-
-        while (isRunning && audioRecord != null) {
-            try {
-                // 读取音频数据
-                val readSize = audioRecord!!.read(audioBuffer, 0, frameSize)
-                if (readSize <= 0) {
-                    Log.w(TAG, "AudioRecord read returned: $readSize")
-                    delay(10)
-                    continue
-                }
-
-                // 转换为float [-1.0, 1.0]
-                for (i in 0 until readSize) {
-                    floatBuffer[i] = audioBuffer[i] / 32768.0f
-                }
-
-                // 如果读取的数据不足一帧,填充0
-                if (readSize < frameSize) {
-                    for (i in readSize until frameSize) {
-                        floatBuffer[i] = 0f
-                    }
-                }
-
-                // VAD处理
-                val probability = vadEngine?.process(floatBuffer) ?: 0f
-
-                // 状态机处理
-                processVadResult(probability)
-
-            } catch (e: CancellationException) {
-                // 协程被取消,正常退出
-                break
-            } catch (e: Exception) {
-                Log.e(TAG, "Error in voice detection loop", e)
-                if (isRunning) {
-                    callback.onError(e)
-                }
-                delay(100)  // 出错后短暂延迟
-            }
-        }
-
-        Log.d(TAG, "Detection loop ended")
+    fun handleVadResult(probability: Float) {
+        processVadResult(probability)
     }
 
     /**
@@ -195,39 +111,21 @@ class VadDetector(
     }
 
     /**
-     * 停止检测
+     * 重置状态
      */
-    fun stop() {
-        if (!isRunning) return
-
-        isRunning = false
-        detectionJob?.cancel()
-
-        try {
-            audioRecord?.stop()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error stopping AudioRecord", e)
-        }
-
-        // 重置状态
+    fun reset() {
         consecutiveVoiceFrames = 0
         consecutiveSilenceFrames = 0
         isVoiceActive = false
         vadEngine?.reset()
-
-        Log.d(TAG, "VAD detection stopped")
+        Log.d(TAG, "VAD state reset")
     }
 
     /**
      * 释放所有资源
      */
     fun release() {
-        stop()
-
         try {
-            audioRecord?.release()
-            audioRecord = null
-
             vadEngine?.release()
             vadEngine = null
         } catch (e: Exception) {
@@ -236,9 +134,4 @@ class VadDetector(
 
         Log.d(TAG, "VAD Detector released")
     }
-
-    /**
-     * 检查是否正在运行
-     */
-    fun isRunning(): Boolean = isRunning
 }
