@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "com.voicelife.assistant"
-    compileSdk = 33
+    compileSdk = 34
     buildToolsVersion = "36.1.0"
 
     defaultConfig {
         applicationId = "com.voicelife.assistant"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -46,6 +46,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
