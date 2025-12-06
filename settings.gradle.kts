@@ -1,11 +1,16 @@
 pluginManagement {
     repositories {
-        // 阿里云镜像 - 插件仓库
-        maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/public") }
-        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+        // CI环境使用原始仓库，本地使用阿里云镜像
+        val isCI = System.getenv("CI") == "true" || System.getenv("GITHUB_ACTIONS") == "true"
         
-        // 备用：原始仓库
+        if (!isCI) {
+            // 阿里云镜像 - 插件仓库（仅本地）
+            maven { url = uri("https://maven.aliyun.com/repository/google") }
+            maven { url = uri("https://maven.aliyun.com/repository/public") }
+            maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+        }
+        
+        // 原始仓库（CI和本地都使用）
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -20,12 +25,17 @@ plugins {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
-        // 阿里云镜像 - 依赖仓库
-        maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/public") }
-        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        // CI环境使用原始仓库，本地使用阿里云镜像
+        val isCI = System.getenv("CI") == "true" || System.getenv("GITHUB_ACTIONS") == "true"
         
-        // 备用：原始仓库
+        if (!isCI) {
+            // 阿里云镜像 - 依赖仓库（仅本地）
+            maven { url = uri("https://maven.aliyun.com/repository/google") }
+            maven { url = uri("https://maven.aliyun.com/repository/public") }
+            maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        }
+        
+        // 原始仓库（CI和本地都使用）
         google()
         mavenCentral()
     }

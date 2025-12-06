@@ -159,9 +159,24 @@ class SileroVadEngine(private val context: Context) {
                 Log.d(TAG, "VAD推理成功 - 概率: $vadProb, 帧数: $frameCount")
             }
 
-            // 更新LSTM状态
-            h = (output[1].value as FloatBuffer).apply { rewind() }
-            c = (output[2].value as FloatBuffer).apply { rewind() }
+            // 更新LSTM状态 - 处理多维数组输出
+            val hOutput = output[1].value as Array<Array<FloatArray>>  // [2, 1, 64]
+            val cOutput = output[2].value as Array<Array<FloatArray>>  // [2, 1, 64]
+            
+            // 展平为一维数组并转换为FloatBuffer
+            h = FloatBuffer.allocate(2 * 64)
+            c = FloatBuffer.allocate(2 * 64)
+            
+            var idx = 0
+            for (i in 0 until 2) {
+                for (j in 0 until 64) {
+                    h!!.put(idx, hOutput[i][0][j])
+                    c!!.put(idx, cOutput[i][0][j])
+                    idx++
+                }
+            }
+            h!!.rewind()
+            c!!.rewind()
 
             // 清理资源
             output.close()
