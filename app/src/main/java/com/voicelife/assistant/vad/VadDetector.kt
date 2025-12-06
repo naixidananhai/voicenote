@@ -65,9 +65,13 @@ class VadDetector(
      */
     fun processFrame(audioFrame: FloatArray): Float {
         return try {
+            if (vadEngine == null) {
+                Log.e(TAG, "VAD引擎未初始化！")
+                return 0f
+            }
             vadEngine?.process(audioFrame) ?: 0f
         } catch (e: Exception) {
-            Log.e(TAG, "Error processing frame", e)
+            Log.e(TAG, "Error processing frame: ${e.message}", e)
             0f
         }
     }

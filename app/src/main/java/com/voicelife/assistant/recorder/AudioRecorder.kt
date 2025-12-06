@@ -94,11 +94,19 @@ class AudioRecorder(
             File(recordingsDir, "failed").mkdirs()
 
             // 初始化VAD检测器
-            vadDetector = VadDetector(context, vadCallback)
-            vadDetector?.init()
-            debugLogger?.d(TAG, "VAD检测器初始化完成")
+            debugLogger?.d(TAG, "开始初始化VAD检测器...")
+            try {
+                vadDetector = VadDetector(context, vadCallback)
+                vadDetector?.init()
+                debugLogger?.i(TAG, "✅ VAD检测器初始化成功")
+            } catch (e: Exception) {
+                debugLogger?.e(TAG, "❌ VAD初始化失败: ${e.javaClass.simpleName}: ${e.message}")
+                debugLogger?.e(TAG, "堆栈: ${e.stackTraceToString().take(200)}")
+                throw e
+            }
 
             // 初始化AudioRecord
+            debugLogger?.d(TAG, "开始初始化AudioRecord...")
             audioRecord = AudioRecord(
                 MediaRecorder.AudioSource.VOICE_RECOGNITION,
                 sampleRate,
@@ -112,7 +120,7 @@ class AudioRecorder(
             }
 
             Log.d(TAG, "Audio recorder initialized")
-            debugLogger?.i(TAG, "录制器初始化成功 (16kHz, MONO)")
+            debugLogger?.i(TAG, "✅ 录制器初始化成功 (16kHz, MONO)")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize audio recorder", e)
             debugLogger?.e(TAG, "录制器初始化失败: ${e.message}")

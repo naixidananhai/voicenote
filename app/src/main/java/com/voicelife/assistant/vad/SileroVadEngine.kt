@@ -39,13 +39,19 @@ class SileroVadEngine(private val context: Context) {
      */
     fun init() {
         try {
+            Log.d(TAG, "开始初始化VAD引擎...")
+            
             ortEnvironment = OrtEnvironment.getEnvironment()
+            Log.d(TAG, "ORT环境创建成功")
 
             // 从assets加载模型
+            Log.d(TAG, "正在加载模型文件: $MODEL_FILENAME")
             val modelBytes = context.assets.open(MODEL_FILENAME).use { it.readBytes() }
+            Log.d(TAG, "模型文件加载成功，大小: ${modelBytes.size / 1024}KB")
 
             val sessionOptions = OrtSession.SessionOptions()
             sessionOptions.setIntraOpNumThreads(1)  // 单线程推理
+            Log.d(TAG, "会话选项配置完成")
 
             // 尝试使用NNAPI硬件加速
             try {
@@ -55,14 +61,17 @@ class SileroVadEngine(private val context: Context) {
                 Log.w(TAG, "NNAPI not available, using CPU")
             }
 
+            Log.d(TAG, "正在创建ONNX会话...")
             ortSession = ortEnvironment!!.createSession(modelBytes, sessionOptions)
+            Log.d(TAG, "ONNX会话创建成功")
 
             // 初始化LSTM状态
             initializeState()
+            Log.d(TAG, "LSTM状态初始化完成")
 
-            Log.d(TAG, "Silero VAD initialized successfully")
+            Log.i(TAG, "✅ Silero VAD initialized successfully")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to initialize Silero VAD", e)
+            Log.e(TAG, "❌ Failed to initialize Silero VAD: ${e.javaClass.simpleName}: ${e.message}", e)
             throw e
         }
     }
