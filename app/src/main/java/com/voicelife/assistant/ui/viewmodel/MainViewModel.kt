@@ -1,6 +1,9 @@
 package com.voicelife.assistant.ui.viewmodel
 
 import android.app.Application
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -124,6 +127,48 @@ class MainViewModel @Inject constructor(
     fun clearLogs() {
         debugLogger.clear()
         debugLogger.i("MainViewModel", "日志已清空")
+    }
+
+    /**
+     * 复制全部日志到剪贴板
+     */
+    fun copyAllLogs() {
+        viewModelScope.launch {
+            try {
+                val currentLogs = logs.value
+                if (currentLogs.isEmpty()) {
+                    debugLogger.w("MainViewModel", "没有日志可复制")
+                    return@launch
+                }
+
+                // 格式化日志文本
+                val logText = buildString {
+                    appendLine("=== VoiceLife 语音助手日志 ===")
+                    appendLine("总计: ${currentLogs.size} 条")
+                    appendLine("时间: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())}")
+                    appendLine()
+                    
+                    currentLogs.reversed().forEach { log ->
+                        val levelStr = when (log.level) {
+                            com.voicelife.assistant.utils.LogLevel.DEBUG -> "DEBUG"
+                            com.voicelife.assistant.utils.LogLevel.INFO -> "INFO "
+                            com.voicelife.assistant.utils.LogLevel.WARN -> "WARN "
+                            com.voicelife.assistant.utils.LogLevel.ERROR -> "ERROR"
+                        }
+                        appendLine("${log.timestamp} [$levelStr] [${log.tag}] ${log.message}")
+                    }
+                }
+
+                // 复制到剪贴板
+                val clipboard = getApplication<Application>().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("VoiceLife Logs", logText)
+                clipboard.setPrimaryClip(clip)
+
+                debugLogger.i("MainViewModel", "✅ 已复制 ${currentLogs.size} 条日志到剪贴板")
+            } catch (e: Exception) {
+                debugLogger.e("MainViewModel", "复制日志失败: ${e.message}")
+            }
+        }
     }
 
     /**

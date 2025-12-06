@@ -88,10 +88,10 @@ fun MainScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // 上半部分：控制面板（可滚动）
+        // 上半部分：控制面板（可滚动，占60%）
         Column(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.6f)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -170,13 +170,14 @@ fun MainScreen(
             }
         }
 
-        // 下半部分：实时日志（固定高度）
+        // 下半部分：实时日志（占40%）
         DebugLogCard(
             logs = logs,
             onClear = { viewModel.clearLogs() },
+            onCopyAll = { viewModel.copyAllLogs() },
             modifier = Modifier
+                .weight(0.4f)
                 .fillMaxWidth()
-                .height(250.dp)
         )
 
         // 加载指示器
@@ -431,6 +432,7 @@ fun StatRow(label: String, value: String) {
 fun DebugLogCard(
     logs: List<com.voicelife.assistant.utils.LogEntry>,
     onClear: () -> Unit,
+    onCopyAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -455,8 +457,15 @@ fun DebugLogCard(
                     style = MaterialTheme.typography.titleSmall,
                     color = Color.White
                 )
-                TextButton(onClick = onClear) {
-                    Text("清空", color = Color(0xFF64B5F6))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    TextButton(onClick = onCopyAll) {
+                        Text("📋 复制", color = Color(0xFF81C784))
+                    }
+                    TextButton(onClick = onClear) {
+                        Text("清空", color = Color(0xFF64B5F6))
+                    }
                 }
             }
 
