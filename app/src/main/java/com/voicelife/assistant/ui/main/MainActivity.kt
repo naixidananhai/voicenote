@@ -85,17 +85,14 @@ fun MainScreen(
     val uiState by viewModel.uiState.collectAsState()
     val logs by viewModel.logs.collectAsState()
 
+    // 整个页面可滚动
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 上半部分：控制面板（可滚动，占60%）
-        Column(
-            modifier = Modifier
-                .weight(0.6f)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
         // 标题
         Text(
             text = "VoiceLife 语音助手",
@@ -154,36 +151,37 @@ fun MainScreen(
             }
         }
 
-            // 错误消息
-            uiState.error?.let { error ->
-                Snackbar(
-                    modifier = Modifier.padding(8.dp),
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    action = {
-                        TextButton(onClick = { viewModel.clearError() }) {
-                            Text("确定")
-                        }
+        // 错误消息
+        uiState.error?.let { error ->
+            Snackbar(
+                modifier = Modifier.padding(8.dp),
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                action = {
+                    TextButton(onClick = { viewModel.clearError() }) {
+                        Text("确定")
                     }
-                ) {
-                    Text(error)
                 }
+            ) {
+                Text(error)
             }
         }
 
-        // 下半部分：实时日志（占40%）
+        // 实时日志面板（固定高度400dp）
         DebugLogCard(
             logs = logs,
             onClear = { viewModel.clearLogs() },
             onCopyAll = { viewModel.copyAllLogs() },
             modifier = Modifier
-                .weight(0.4f)
                 .fillMaxWidth()
+                .height(400.dp)
         )
 
         // 加载指示器
         if (uiState.isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
