@@ -201,6 +201,17 @@ class AudioRecorder(
                 for (i in 0 until readSize) {
                     floatBuffer[i] = audioBuffer[i] / 32768.0f
                 }
+                
+                // 诊断：检查原始音频数据
+                if (frameCount % 100 == 0) {
+                    val maxShort = audioBuffer.maxOrNull() ?: 0
+                    val minShort = audioBuffer.minOrNull() ?: 0
+                    val avgShort = audioBuffer.average()
+                    val maxFloat = floatBuffer.maxOrNull() ?: 0f
+                    val minFloat = floatBuffer.minOrNull() ?: 0f
+                    debugLogger?.d(TAG, "原始音频 - Short范围: [$minShort, $maxShort], 平均: $avgShort")
+                    debugLogger?.d(TAG, "Float音频 - 范围: [$minFloat, $maxFloat]")
+                }
 
                 // 送给VAD检测
                 val probability = vadDetector?.processFrame(floatBuffer) ?: 0f

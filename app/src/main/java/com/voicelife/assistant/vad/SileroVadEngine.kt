@@ -27,6 +27,9 @@ class SileroVadEngine(private val context: Context) {
     private var h: FloatBuffer? = null
     private var c: FloatBuffer? = null
     private var sr: LongBuffer? = null
+    
+    // 诊断计数器
+    private var frameCount = 0L
 
     companion object {
         private const val TAG = "SileroVadEngine"
@@ -102,6 +105,16 @@ class SileroVadEngine(private val context: Context) {
         }
 
         try {
+            // 诊断：检查音频数据统计
+            val max = audioFrame.maxOrNull() ?: 0f
+            val min = audioFrame.minOrNull() ?: 0f
+            val avg = audioFrame.average().toFloat()
+            val rms = kotlin.math.sqrt(audioFrame.map { it * it }.average()).toFloat()
+            
+            if (frameCount % 100 == 0L) {
+                Log.d(TAG, "音频统计 - Max: $max, Min: $min, Avg: $avg, RMS: $rms")
+            }
+            frameCount++
             // 准备输入张量
             val inputTensor = OnnxTensor.createTensor(
                 ortEnvironment,
@@ -140,6 +153,11 @@ class SileroVadEngine(private val context: Context) {
             // 获取输出概率 [1, 1]
             val probability = (output[0].value as Array<*>)[0] as FloatArray
             val vadProb = probability[0]
+            
+            // 诊断：记录VAD概率
+            if (frameCount % 50 == 0L) {
+                Log.d(TAG, "VAD推理成功 - 概率: $vadProb, 帧数: $frameCount")
+            }
 
             // 更新LSTM状态
             h = (output[1].value as FloatBuffer).apply { rewind() }
