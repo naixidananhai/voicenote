@@ -30,7 +30,11 @@ class StorageManager @Inject constructor(
     private val context: Context,
     private val recordingRepository: RecordingRepository
 ) {
-    private val recordingsDir = File(context.filesDir, "recordings")
+    // 使用公共Download目录，方便用户访问
+    private val recordingsDir = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+        "VoiceAssistant"
+    )
 
     companion object {
         private const val TAG = "StorageManager"

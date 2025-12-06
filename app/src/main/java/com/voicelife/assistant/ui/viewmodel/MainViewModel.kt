@@ -14,10 +14,12 @@ import com.voicelife.assistant.storage.StorageInfo
 import com.voicelife.assistant.storage.StorageManager
 import com.voicelife.assistant.utils.PermissionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -210,6 +212,38 @@ class MainViewModel @Inject constructor(
                     debugLogger.i("MainViewModel", "adb pull ${recordingsDir.absolutePath} .")
                 } else {
                     debugLogger.w("MainViewModel", "⚠️ 文件夹为空，还没有录音")
+                }
+                
+                // 打开文件管理器
+                withContext(Dispatchers.Main) {
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndType(
+                                android.net.Uri.parse(recordingsDir.absolutePath),
+                                "resource/folder"
+                            )
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        
+                        // 尝试打开文件管理器
+                        val app = getApplication<Application>()
+                        if (intent.resolveActivity(app.packageManager) != null) {
+                            app.startActivity(intent)
+                            debugLogger.i("MainViewModel", "✅ 已打开文件管理器")
+                        } else {
+                            // 备用方案：使用DocumentsUI
+                            val documentsIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                                type = "*/*"
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            app.startActivity(documentsIntent)
+                            debugLogger.i("MainViewModel", "✅ 已打开文档选择器")
+                        }
+                    } catch (e: Exception) {
+                        debugLogger.w("MainViewModel", "⚠️ 无法打开文件管理器: ${e.message}")
+                        debugLogger.i("MainViewModel", "💡 请手动打开: 文件管理器 > Download > VoiceAssistant")
+                    }
                 }
                 
             } catch (e: Exception) {

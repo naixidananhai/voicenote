@@ -65,9 +65,14 @@ class MainActivity : ComponentActivity() {
     private fun requestPermissions() {
         val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
 
-        // Android 13+ 需要通知权限
+        // Android 13+ 需要通知权限和音频权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+            permissions.add(Manifest.permission.READ_MEDIA_AUDIO)
+        } else {
+            // Android 12及以下需要存储权限
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
         permissionLauncher.launch(permissions.toTypedArray())
