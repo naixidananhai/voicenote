@@ -16,7 +16,8 @@
         "fill",
         "wait_for",
         "handle_dialog",
-        "fill_form"
+        "fill_form",
+        "take_screenshot"
       ]
     }
   }
