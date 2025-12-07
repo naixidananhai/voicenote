@@ -5,9 +5,27 @@ import java.io.BufferedReader
 import java.io.FileReader
 
 object WhisperCpuConfig {
+    /**
+     * 推荐的线程数
+     * 
+     * 可以通过修改 PREFERRED_THREADS 来手动设置线程数
+     * - 设置为 0: 自动检测高性能CPU核心数
+     * - 设置为 1-8: 使用指定的线程数
+     * 
+     * 建议:
+     * - 高性能手机: 4-6 线程
+     * - 普通手机: 2-4 线程
+     * - 省电模式: 1-2 线程
+     */
+    private const val PREFERRED_THREADS = 4  // 手动设置线程数，0表示自动检测
+    
     val preferredThreadCount: Int
-        // Always use at least 2 threads:
-        get() = CpuInfo.getHighPerfCpuCount().coerceAtLeast(2)
+        get() = if (PREFERRED_THREADS > 0) {
+            PREFERRED_THREADS
+        } else {
+            // 自动检测高性能CPU核心数，至少使用2线程
+            CpuInfo.getHighPerfCpuCount().coerceAtLeast(2)
+        }
 }
 
 private class CpuInfo(private val lines: List<String>) {

@@ -5,7 +5,9 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.util.Log
+import com.voicelife.assistant.config.AudioConfig
 import kotlinx.coroutines.*
+import kotlin.math.sqrt
 
 /**
  * VAD检测器
@@ -17,9 +19,7 @@ import kotlinx.coroutines.*
  * 3. 使用状态机处理检测结果(防抖动)
  * 4. 通过回调通知人声活动状态
  *
- * 防抖动策略:
- * - 连续3帧检测到人声才触发onVoiceStart
- * - 连续30帧(约2秒)静音才触发onVoiceEnd
+ * 参数配置: 见 AudioConfig.VAD
  */
 class VadDetector(
     private val context: Context,
@@ -27,10 +27,12 @@ class VadDetector(
 ) {
     private var vadEngine: SileroVadEngine? = null
 
-    // VAD参数
-    private val voiceThreshold = 0.3f  // 人声概率阈值（降低以提高灵敏度）
-    private val minVoiceFrames = 3     // 连续3帧才触发开始
-    private val minSilenceFrames = 30  // 约2秒静音才结束
+    // VAD参数 - 从配置文件读取
+    private val voiceThreshold = AudioConfig.VAD.VOICE_THRESHOLD
+    private val minVoiceFrames = AudioConfig.VAD.MIN_VOICE_FRAMES
+    private val minSilenceFrames = AudioConfig.VAD.MIN_SILENCE_FRAMES
+    private val energyThreshold = AudioConfig.VAD.ENERGY_THRESHOLD
+    private val enableEnergyFilter = AudioConfig.VAD.ENABLE_ENERGY_FILTER
 
     // 状态机
     private var consecutiveVoiceFrames = 0
@@ -69,6 +71,15 @@ class VadDetector(
                 Log.e(TAG, "VAD引擎未初始化！")
                 return 0f
             }
+            
+            // 能量预过滤：低能量音频直接返回0
+            if (enableEnergyFilter) {
+                val energy = calculateRmsEnergy(audioFrame)
+                if (energy < energyThreshold) {
+                    return 0f  // 能量太低，直接判定为静音
+                }
+            }
+            
             vadEngine?.process(audioFrame) ?: 0f
         } catch (e: Exception) {
             Log.e(TAG, "Error processing frame: ${e.message}", e)
@@ -82,6 +93,17 @@ class VadDetector(
      */
     fun handleVadResult(probability: Float) {
         processVadResult(probability)
+    }
+
+    /**
+     * 计算音频帧的RMS能量
+     */
+    private fun calculateRmsEnergy(audioFrame: FloatArray): Float {
+        var sum = 0f
+        for (sample in audioFrame) {
+            sum += sample * sample
+        }
+        return sqrt(sum / audioFrame.size)
     }
 
     /**
