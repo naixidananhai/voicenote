@@ -8,7 +8,7 @@ import com.voicelife.assistant.data.model.Transcription
 
 @Database(
     entities = [Recording::class, Transcription::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -41,17 +41,28 @@ class WavFileWriter(private val outputFile: File) {
     fun start() {
         try {
             // 确保父目录存在
-            outputFile.parentFile?.mkdirs()
+            val parentDir = outputFile.parentFile
+            if (parentDir != null && !parentDir.exists()) {
+                val created = parentDir.mkdirs()
+                Log.d(TAG, "Created parent directory: $created, path: ${parentDir.absolutePath}")
+                Log.d(TAG, "Directory writable: ${parentDir.canWrite()}")
+            }
 
+            Log.d(TAG, "Creating file: ${outputFile.absolutePath}")
             fileOutputStream = FileOutputStream(outputFile)
+            Log.d(TAG, "FileOutputStream created successfully")
 
             // 先写入占位的WAV头(稍后更新)
             writeWavHeader(0)
+            Log.d(TAG, "WAV header written")
 
             dataSize = 0
-            Log.d(TAG, "Started writing WAV file: ${outputFile.absolutePath}")
+            Log.i(TAG, "✅ Started writing WAV file: ${outputFile.absolutePath}")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to start WAV writer", e)
+            Log.e(TAG, "❌ Failed to start WAV writer: ${e.javaClass.simpleName}: ${e.message}", e)
+            Log.e(TAG, "File path: ${outputFile.absolutePath}")
+            Log.e(TAG, "Parent exists: ${outputFile.parentFile?.exists()}")
+            Log.e(TAG, "Parent writable: ${outputFile.parentFile?.canWrite()}")
             throw e
         }
     }

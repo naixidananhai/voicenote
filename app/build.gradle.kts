@@ -85,6 +85,9 @@ dependencies {
     // ONNX Runtime (for Silero VAD)
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.16.3")
 
+    // Whisper.cpp for speech recognition
+    implementation(project(":whisper-lib"))
+
     // Gson for JSON
     implementation("com.google.code.gson:gson:2.10.1")
 

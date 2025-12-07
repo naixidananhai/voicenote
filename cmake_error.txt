@@ -1,0 +1,359 @@
+﻿Initialized native services in: C:\Users\yangyayuan\.gradle\native
+Initialized jansi services in: C:\Users\yangyayuan\.gradle\native
+Received JVM installation metadata from 'C:\Program Files\Java\jdk-17': {JAVA_HOME=C:\Program Files\Java\jdk-17, JAVA_VERSION=17, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=17+35-LTS-2724, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=17+35-LTS-2724, VM_VENDOR=Oracle Corporation, OS_ARCH=amd64}
+The client will now receive all logging from the daemon (pid: 3936). The daemon log file: C:\Users\yangyayuan\.gradle\daemon\8.5\daemon-3936.out.log
+Starting 31st build in daemon [uptime: 3 hrs 24 mins 51.475 secs, performance: 100%, GC rate: 0.00/s, heap usage: 5% of 2 GiB]
+Using 8 worker leases.
+Now considering [C:\Users\yangyayuan\Desktop\yu] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Users\yangyayuan\Desktop\yu\settings.gradle.kts'.
+Using local directory build cache for the root build (location = C:\Users\yangyayuan\.gradle\caches\build-cache-1, removeUnusedEntriesAfter = 7 days).
+Projects loaded. Root project using build file 'C:\Users\yangyayuan\Desktop\yu\build.gradle.kts'.
+Included projects: [root project 'VoiceLifeAssistant', project ':app', project ':whisper-lib']
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+
+> Configure project :
+Evaluating root project 'VoiceLifeAssistant' using build file 'C:\Users\yangyayuan\Desktop\yu\build.gradle.kts'.
+
+> Configure project :app
+Evaluating project ':app' using build file 'C:\Users\yangyayuan\Desktop\yu\app\build.gradle.kts'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle81 variant
+Build cache key for Kotlin DSL accessors for project ':app' is 31c62e67163162689f301d40598b5502
+Skipping Kotlin DSL accessors for project ':app' as it is up-to-date.
+
+> Configure project :whisper-lib
+Evaluating project ':whisper-lib' using build file 'C:\Users\yangyayuan\Desktop\yu\whisper-lib\build.gradle.kts'.
+Using default execution profile
+Using Kotlin Gradle Plugin gradle81 variant
+Build cache key for Kotlin DSL accessors for project ':whisper-lib' is 8971dfcc2f760d896b02e74e1b5680b9
+Skipping Kotlin DSL accessors for project ':whisper-lib' as it is up-to-date.
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+C/C++: android.ndkVersion from module build.gradle is [29.0.14206865]
+C/C++: android.ndkPath from module build.gradle is not set
+C/C++: ndk.dir in local.properties is not set
+C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+C/C++: sdkFolder is C:\Users\yangyayuan\AppData\Local\Android\Sdk
+All projects evaluated.
+Task path ':whisper-lib:buildCMakeDebug' matched project ':whisper-lib'
+Task name matched 'buildCMakeDebug'
+Selected primary task 'buildCMakeDebug' from project :whisper-lib
+Tasks to be executed: [task ':whisper-lib:preBuild', task ':whisper-lib:preDebugBuild', task ':whisper-lib:configureCMakeDebug[arm64-v8a]', task ':whisper-lib:buildCMakeDebug[arm64-v8a]', task ':whisper-lib:configureCMakeDebug[armeabi-v7a]', task ':whisper-lib:buildCMakeDebug[armeabi-v7a]', task ':whisper-lib:buildCMakeDebug']
+Tasks that were excluded: []
+Analytics other plugin to proto: Unknown plugin type org.gradle.kotlin.dsl.provider.plugins.KotlinScriptRootPlugin$Inject expected enum ORG_GRADLE_KOTLIN_DSL_PROVIDER_PLUGINS_KOTLINSCRIPTROOTPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.kotlin.dsl.provider.plugins.KotlinScriptBasePlugin$Inject expected enum ORG_GRADLE_KOTLIN_DSL_PROVIDER_PLUGINS_KOTLINSCRIPTBASEPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.api.plugins.JvmEcosystemPlugin$Inject expected enum ORG_GRADLE_API_PLUGINS_JVMECOSYSTEMPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.api.plugins.JvmToolchainsPlugin$Inject expected enum ORG_GRADLE_API_PLUGINS_JVMTOOLCHAINSPLUGIN
+Analytics other plugin to proto: Unknown plugin type dagger.hilt.android.plugin.HiltGradlePlugin expected enum DAGGER_HILT_ANDROID_PLUGIN_HILTGRADLEPLUGIN
+Analytics other plugin to proto: Unknown plugin type com.google.devtools.ksp.gradle.KspGradleSubplugin expected enum COM_GOOGLE_DEVTOOLS_KSP_GRADLE_KSPGRADLESUBPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.kotlin.dsl.provider.plugins.KotlinScriptBasePlugin$Inject expected enum ORG_GRADLE_KOTLIN_DSL_PROVIDER_PLUGINS_KOTLINSCRIPTBASEPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.api.plugins.JvmEcosystemPlugin$Inject expected enum ORG_GRADLE_API_PLUGINS_JVMECOSYSTEMPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.api.plugins.JvmToolchainsPlugin$Inject expected enum ORG_GRADLE_API_PLUGINS_JVMTOOLCHAINSPLUGIN
+Analytics other plugin to proto: Unknown plugin type org.gradle.kotlin.dsl.provider.plugins.KotlinScriptBasePlugin$Inject expected enum ORG_GRADLE_KOTLIN_DSL_PROVIDER_PLUGINS_KOTLINSCRIPTBASEPLUGIN
+Resolve mutations for :whisper-lib:preBuild (Thread[Execution worker,5,main]) started.
+:whisper-lib:preBuild (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:preBuild UP-TO-DATE
+Skipping task ':whisper-lib:preBuild' as it has no actions.
+Resolve mutations for :whisper-lib:preDebugBuild (Thread[Execution worker,5,main]) started.
+:whisper-lib:preDebugBuild (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:preDebugBuild UP-TO-DATE
+Skipping task ':whisper-lib:preDebugBuild' as it has no actions.
+Resolve mutations for :whisper-lib:configureCMakeDebug[arm64-v8a] (Thread[Execution worker,5,main]) started.
+:whisper-lib:configureCMakeDebug[arm64-v8a] (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:configureCMakeDebug[arm64-v8a]
+Caching disabled for task ':whisper-lib:configureCMakeDebug[arm64-v8a]' because:
+  Caching has been disabled for the task
+Task ':whisper-lib:configureCMakeDebug[arm64-v8a]' is not up-to-date because:
+  Task.upToDateWhen is false.
+Starting process 'command 'C:\Program Files\CMake\bin\cmake''. Working directory: C:\Users\yangyayuan\Desktop\yu Command: C:\Program Files\CMake\bin\cmake --version
+Successfully started process 'command 'C:\Program Files\CMake\bin\cmake''
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|arm64-v8a : Start JSON generation. Platform version: 26 min SDK version: arm64-v8a
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|arm64-v8a : JSON 'C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\arm64-v8a\android_gradle_build.json' was up-to-date
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|arm64-v8a : JSON generation completed without problems
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|arm64-v8a : Writing build model to C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\logs\arm64-v8a\build_model.json
+Resolve mutations for :whisper-lib:buildCMakeDebug[arm64-v8a] (Thread[Execution worker,5,main]) started.
+:whisper-lib:buildCMakeDebug[arm64-v8a] (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:buildCMakeDebug[arm64-v8a]
+Caching disabled for task ':whisper-lib:buildCMakeDebug[arm64-v8a]' because:
+  Caching has been disabled for the task
+Task ':whisper-lib:buildCMakeDebug[arm64-v8a]' is not up-to-date because:
+  Task.upToDateWhen is false.
+C/C++: starting build
+C/C++: reading expected JSONs
+C/C++: done reading expected JSONs
+C/C++: executing build commands for targets that produce .so files or executables
+C/C++: evaluate miniconfig
+C/C++: evaluate library ggml-base (arm64-v8a)
+C/C++: building target library ggml-base because no targets are specified.
+C/C++: evaluate library ggml-cpu (arm64-v8a)
+C/C++: building target library ggml-cpu because no targets are specified.
+C/C++: evaluate library whisper (arm64-v8a)
+C/C++: building target library whisper because no targets are specified.
+C/C++: evaluate library whisper_v8fp16_va (arm64-v8a)
+C/C++: building target library whisper_v8fp16_va because no targets are specified.
+C/C++: evaluate library ggml (arm64-v8a)
+C/C++: building target library ggml because no targets are specified.
+C/C++: about to build targets ggml, ggml-base, ggml-cpu, whisper, whisper_v8fp16_va
+C/C++: Build multiple targets ggml-base_arm64-v8a ggml-cpu_arm64-v8a whisper_arm64-v8a whisper_v8fp16_va_arm64-v8a ggml_arm64-v8a
+C/C++: @echo off
+"C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
+  -C ^
+  "C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\.cxx\\Debug\\6g5r4515\\arm64-v8a" ^
+  ggml ^
+  ggml-base ^
+  ggml-cpu ^
+  whisper ^
+  whisper_v8fp16_va
+
+Starting process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe''. Working directory: C:\Users\yangyayuan\Desktop\yu\whisper-lib Command: C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe -C C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\arm64-v8a ggml ggml-base ggml-cpu whisper whisper_v8fp16_va
+Successfully started process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe''
+C/C++: ninja: Entering directory `C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\arm64-v8a'
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/jni.c:94:15: warning: 'whisper_init' is deprecated: use whisper_init_with_params instead [-Wdeprecated-declarations]
+C/C++:    94 |     context = whisper_init(&loader);
+C/C++:       |               ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:224:5: note: 'whisper_init' has been explicitly marked deprecated here
+C/C++:   224 |     WHISPER_DEPRECATED(
+C/C++:       |     ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:12:64: note: expanded from macro 'WHISPER_DEPRECATED'
+C/C++:    12 | #    define WHISPER_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+C/C++:       |                                                                ^
+C/C++: 1 warning generated.
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/jni.c:94:15: warning: 'whisper_init' is deprecated: use whisper_init_with_params instead [-Wdeprecated-declarations]
+C/C++:    94 |     context = whisper_init(&loader);
+C/C++:       |               ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:224:5: note: 'whisper_init' has been explicitly marked deprecated here
+C/C++:   224 |     WHISPER_DEPRECATED(
+C/C++:       |     ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:12:64: note: expanded from macro 'WHISPER_DEPRECATED'
+C/C++:    12 | #    define WHISPER_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+C/C++:       |                                                                ^
+C/C++: 1 warning generated.
+C/C++: Received process result: 0
+C/C++: check expected build outputs
+C/C++: hard linked C:\Users\yangyayuan\AppData\Local\Android\Sdk\ndk\29.0.14206865\toolchains\llvm\prebuilt\windows-x86_64\lib\clang\21\lib\linux\aarch64\libomp.so to C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\obj\arm64-v8a\libomp.so
+C/C++: build complete
+Resolve mutations for :whisper-lib:configureCMakeDebug[armeabi-v7a] (Thread[Execution worker,5,main]) started.
+:whisper-lib:configureCMakeDebug[armeabi-v7a] (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:configureCMakeDebug[armeabi-v7a]
+Caching disabled for task ':whisper-lib:configureCMakeDebug[armeabi-v7a]' because:
+  Caching has been disabled for the task
+Task ':whisper-lib:configureCMakeDebug[armeabi-v7a]' is not up-to-date because:
+  Task.upToDateWhen is false.
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : Start JSON generation. Platform version: 26 min SDK version: armeabi-v7a
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : rebuilding JSON C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a\android_gradle_build.json due to:
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : - no fingerprint file, will remove stale configuration folder
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : removing stale contents from 'C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a'
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : created folder 'C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a'
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : executing cmake @echo off
+"C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\cmake.exe" ^
+  "-HC:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\src\\main\\jni\\whisper" ^
+  "-DCMAKE_SYSTEM_NAME=Android" ^
+  "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" ^
+  "-DCMAKE_SYSTEM_VERSION=26" ^
+  "-DANDROID_PLATFORM=android-26" ^
+  "-DANDROID_ABI=armeabi-v7a" ^
+  "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a" ^
+  "-DANDROID_NDK=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865" ^
+  "-DCMAKE_ANDROID_NDK=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865" ^
+  "-DCMAKE_TOOLCHAIN_FILE=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865\\build\\cmake\\android.toolchain.cmake" ^
+  "-DCMAKE_MAKE_PROGRAM=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
+  "-DCMAKE_CXX_FLAGS=-std=c++17" ^
+  "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\build\\intermediates\\cxx\\Debug\\6g5r4515\\obj\\armeabi-v7a" ^
+  "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\build\\intermediates\\cxx\\Debug\\6g5r4515\\obj\\armeabi-v7a" ^
+  "-DCMAKE_BUILD_TYPE=Debug" ^
+  "-BC:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\.cxx\\Debug\\6g5r4515\\armeabi-v7a" ^
+  -GNinja
+
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : @echo off
+"C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\cmake.exe" ^
+  "-HC:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\src\\main\\jni\\whisper" ^
+  "-DCMAKE_SYSTEM_NAME=Android" ^
+  "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" ^
+  "-DCMAKE_SYSTEM_VERSION=26" ^
+  "-DANDROID_PLATFORM=android-26" ^
+  "-DANDROID_ABI=armeabi-v7a" ^
+  "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a" ^
+  "-DANDROID_NDK=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865" ^
+  "-DCMAKE_ANDROID_NDK=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865" ^
+  "-DCMAKE_TOOLCHAIN_FILE=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\ndk\\29.0.14206865\\build\\cmake\\android.toolchain.cmake" ^
+  "-DCMAKE_MAKE_PROGRAM=C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
+  "-DCMAKE_CXX_FLAGS=-std=c++17" ^
+  "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\build\\intermediates\\cxx\\Debug\\6g5r4515\\obj\\armeabi-v7a" ^
+  "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\build\\intermediates\\cxx\\Debug\\6g5r4515\\obj\\armeabi-v7a" ^
+  "-DCMAKE_BUILD_TYPE=Debug" ^
+  "-BC:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\.cxx\\Debug\\6g5r4515\\armeabi-v7a" ^
+  -GNinja
+
+Starting process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe''. Working directory: C:\Users\yangyayuan\Desktop\yu\whisper-lib Command: C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe -HC:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper -DCMAKE_SYSTEM_NAME=Android -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_SYSTEM_VERSION=26 -DANDROID_PLATFORM=android-26 -DANDROID_ABI=armeabi-v7a -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DANDROID_NDK=C:\Users\yangyayuan\AppData\Local\Android\Sdk\ndk\29.0.14206865 -DCMAKE_ANDROID_NDK=C:\Users\yangyayuan\AppData\Local\Android\Sdk\ndk\29.0.14206865 -DCMAKE_TOOLCHAIN_FILE=C:\Users\yangyayuan\AppData\Local\Android\Sdk\ndk\29.0.14206865\build\cmake\android.toolchain.cmake -DCMAKE_MAKE_PROGRAM=C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe -DCMAKE_CXX_FLAGS=-std=c++17 -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\obj\armeabi-v7a -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\obj\armeabi-v7a -DCMAKE_BUILD_TYPE=Debug -BC:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a -GNinja
+Successfully started process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe''
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : Received process result: 0
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : Exiting generation of C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a\compile_commands.json.bin normally
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : done executing cmake
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : deleted unexpected build output C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\obj\armeabi-v7a\libomp.so in incremental regenerate
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : hard linked C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a\compile_commands.json to C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\tools\debug\armeabi-v7a\compile_commands.json
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : JSON generation completed without problems
+C/C++: C:\Users\yangyayuan\Desktop\yu\whisper-lib\src\main\jni\whisper\CMakeLists.txt debug|armeabi-v7a : Writing build model to C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\logs\armeabi-v7a\build_model.json
+Resolve mutations for :whisper-lib:buildCMakeDebug[armeabi-v7a] (Thread[Execution worker,5,main]) started.
+:whisper-lib:buildCMakeDebug[armeabi-v7a] (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:buildCMakeDebug[armeabi-v7a]
+Caching disabled for task ':whisper-lib:buildCMakeDebug[armeabi-v7a]' because:
+  Caching has been disabled for the task
+Task ':whisper-lib:buildCMakeDebug[armeabi-v7a]' is not up-to-date because:
+  Task.upToDateWhen is false.
+C/C++: starting build
+C/C++: reading expected JSONs
+C/C++: done reading expected JSONs
+C/C++: executing build commands for targets that produce .so files or executables
+C/C++: evaluate miniconfig
+C/C++: evaluate library ggml-base (armeabi-v7a)
+C/C++: building target library ggml-base because no targets are specified.
+C/C++: evaluate library whisper_vfpv4 (armeabi-v7a)
+C/C++: building target library whisper_vfpv4 because no targets are specified.
+C/C++: evaluate library ggml-cpu (armeabi-v7a)
+C/C++: building target library ggml-cpu because no targets are specified.
+C/C++: evaluate library whisper (armeabi-v7a)
+C/C++: building target library whisper because no targets are specified.
+C/C++: evaluate library ggml (armeabi-v7a)
+C/C++: building target library ggml because no targets are specified.
+C/C++: about to build targets ggml, ggml-base, ggml-cpu, whisper, whisper_vfpv4
+C/C++: Build multiple targets ggml-base_armeabi-v7a whisper_vfpv4_armeabi-v7a ggml-cpu_armeabi-v7a whisper_armeabi-v7a ggml_armeabi-v7a
+C/C++: @echo off
+"C:\\Users\\yangyayuan\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
+  -C ^
+  "C:\\Users\\yangyayuan\\Desktop\\yu\\whisper-lib\\.cxx\\Debug\\6g5r4515\\armeabi-v7a" ^
+  ggml ^
+  ggml-base ^
+  ggml-cpu ^
+  whisper ^
+  whisper_vfpv4
+
+Starting process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe''. Working directory: C:\Users\yangyayuan\Desktop\yu\whisper-lib Command: C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe -C C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a ggml ggml-base ggml-cpu whisper whisper_vfpv4
+Successfully started process 'command 'C:\Users\yangyayuan\AppData\Local\Android\Sdk\cmake\3.22.1\bin\ninja.exe''
+C/C++: ninja: Entering directory `C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\armeabi-v7a'
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/jni.c:94:15: warning: 'whisper_init' is deprecated: use whisper_init_with_params instead [-Wdeprecated-declarations]
+C/C++:    94 |     context = whisper_init(&loader);
+C/C++:       |               ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:224:5: note: 'whisper_init' has been explicitly marked deprecated here
+C/C++:   224 |     WHISPER_DEPRECATED(
+C/C++:       |     ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:12:64: note: expanded from macro 'WHISPER_DEPRECATED'
+C/C++:    12 | #    define WHISPER_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+C/C++:       |                                                                ^
+C/C++: 1 warning generated.
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/jni.c:94:15: warning: 'whisper_init' is deprecated: use whisper_init_with_params instead [-Wdeprecated-declarations]
+C/C++:    94 |     context = whisper_init(&loader);
+C/C++:       |               ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:224:5: note: 'whisper_init' has been explicitly marked deprecated here
+C/C++:   224 |     WHISPER_DEPRECATED(
+C/C++:       |     ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:12:64: note: expanded from macro 'WHISPER_DEPRECATED'
+C/C++:    12 | #    define WHISPER_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+C/C++:       |                                                                ^
+C/C++: 1 warning generated.
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper-cpp/src/whisper.cpp:3437:80: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+C/C++:  3437 |         WHISPER_LOG_INFO("%s: alignment heads masks size = %ld B\n", __func__, memory_size);
+C/C++:       |                                                            ~~~                 ^~~~~~~~~~~
+C/C++:       |                                                            %zu
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper-cpp/src/whisper.cpp:123:75: note: expanded from macro 'WHISPER_LOG_INFO'
+C/C++:   123 | #define WHISPER_LOG_INFO(...)  whisper_log_internal(GGML_LOG_LEVEL_INFO , __VA_ARGS__)
+C/C++:       |                                                                           ^~~~~~~~~~~
+C/C++: 1 warning generated.
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper-cpp/src/whisper.cpp:3437:80: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+C/C++:  3437 |         WHISPER_LOG_INFO("%s: alignment heads masks size = %ld B\n", __func__, memory_size);
+C/C++:       |                                                            ~~~                 ^~~~~~~~~~~
+C/C++:       |                                                            %zu
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper-cpp/src/whisper.cpp:123:75: note: expanded from macro 'WHISPER_LOG_INFO'
+C/C++:   123 | #define WHISPER_LOG_INFO(...)  whisper_log_internal(GGML_LOG_LEVEL_INFO , __VA_ARGS__)
+C/C++:       |                                                                           ^~~~~~~~~~~
+C/C++: 1 warning generated.
+C/C++: Received process result: 0
+C/C++: check expected build outputs
+C/C++: hard linked C:\Users\yangyayuan\AppData\Local\Android\Sdk\ndk\29.0.14206865\toolchains\llvm\prebuilt\windows-x86_64\lib\clang\21\lib\linux\arm\libomp.so to C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\cxx\Debug\6g5r4515\obj\armeabi-v7a\libomp.so
+C/C++: build complete
+Resolve mutations for :whisper-lib:buildCMakeDebug (Thread[Execution worker,5,main]) started.
+:whisper-lib:buildCMakeDebug (Thread[Execution worker,5,main]) started.
+
+> Task :whisper-lib:buildCMakeDebug
+Skipping task ':whisper-lib:buildCMakeDebug' as it has no actions.
+
+BUILD SUCCESSFUL in 48s
+4 actionable tasks: 4 executed
+Watched directory hierarchies: [C:\Users\yangyayuan\Desktop\yu]

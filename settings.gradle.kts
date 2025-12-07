@@ -38,8 +38,10 @@ dependencyResolutionManagement {
         // 原始仓库（CI和本地都使用）
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 rootProject.name = "VoiceLifeAssistant"
 include(":app")
+include(":whisper-lib")

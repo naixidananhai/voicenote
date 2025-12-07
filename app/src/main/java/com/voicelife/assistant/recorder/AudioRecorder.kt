@@ -176,6 +176,7 @@ class AudioRecorder(
         val audioBuffer = ShortArray(frameSize)
         val floatBuffer = FloatArray(frameSize)
         var frameCount = 0
+        var zeroFrameCount = 0  // 连续零数据帧计数
 
         debugLogger?.d(TAG, "开始读取音频数据...")
 
@@ -192,9 +193,42 @@ class AudioRecorder(
 
                 frameCount++
                 
+                // 检测零数据
+                val isAllZero = audioBuffer.all { it.toInt() == 0 }
+                if (isAllZero) {
+                    zeroFrameCount++
+                    
+                    // 连续100帧零数据 - 警告
+                    if (zeroFrameCount == 100) {
+                        debugLogger?.e(TAG, "⚠️ 警告：连续100帧音频数据为0！麦克风可能未工作")
+                        Log.e(TAG, "Microphone not working: 100 consecutive zero frames")
+                    }
+                    
+                    // 连续500帧零数据 - 尝试重启（约16秒）
+                    if (zeroFrameCount == 500) {
+                        debugLogger?.e(TAG, "❌ 严重：连续500帧零数据，尝试重启AudioRecord...")
+                        Log.e(TAG, "Critical: 500 consecutive zero frames, attempting restart")
+                        
+                        // 在协程中重启
+                        CoroutineScope(Dispatchers.IO).launch {
+                            try {
+                                restartAudioRecord()
+                            } catch (e: Exception) {
+                                debugLogger?.e(TAG, "重启失败: ${e.message}")
+                            }
+                        }
+                        zeroFrameCount = 0  // 重置计数
+                    }
+                } else {
+                    if (zeroFrameCount >= 100) {
+                        debugLogger?.i(TAG, "✅ 麦克风恢复正常")
+                    }
+                    zeroFrameCount = 0
+                }
+                
                 // 每100帧输出一次日志
                 if (frameCount % 100 == 0) {
-                    debugLogger?.d(TAG, "已处理 $frameCount 帧音频")
+                    debugLogger?.d(TAG, "已处理 $frameCount 帧音频 (零帧: $zeroFrameCount)")
                 }
 
                 // 转换为float给VAD使用
@@ -298,4 +332,54 @@ class AudioRecorder(
      * 获取当前录音会话状态
      */
     fun isSessionActive(): Boolean = recordingSession?.isRecording() ?: false
+
+    /**
+     * 检查AudioRecord是否健康
+     */
+    fun isHealthy(): Boolean {
+        return audioRecord?.state == AudioRecord.STATE_INITIALIZED && 
+               audioRecord?.recordingState == AudioRecord.RECORDSTATE_RECORDING
+    }
+
+    /**
+     * 重启AudioRecord
+     * 用于从麦克风失效中恢复
+     */
+    private suspend fun restartAudioRecord() {
+        debugLogger?.w(TAG, "🔄 开始重启AudioRecord...")
+        
+        try {
+            // 停止当前录制
+            audioRecord?.stop()
+            delay(100)
+            
+            // 释放旧的AudioRecord
+            audioRecord?.release()
+            delay(100)
+            
+            // 创建新的AudioRecord
+            audioRecord = AudioRecord(
+                MediaRecorder.AudioSource.VOICE_RECOGNITION,
+                sampleRate,
+                channelConfig,
+                audioFormat,
+                bufferSize
+            )
+            
+            if (audioRecord?.state != AudioRecord.STATE_INITIALIZED) {
+                throw IllegalStateException("AudioRecord reinitialization failed")
+            }
+            
+            // 重新开始录制
+            audioRecord?.startRecording()
+            
+            debugLogger?.i(TAG, "✅ AudioRecord重启成功")
+            Log.i(TAG, "AudioRecord restarted successfully")
+            
+        } catch (e: Exception) {
+            debugLogger?.e(TAG, "❌ AudioRecord重启失败: ${e.message}")
+            Log.e(TAG, "Failed to restart AudioRecord", e)
+            throw e
+        }
+    }
 }

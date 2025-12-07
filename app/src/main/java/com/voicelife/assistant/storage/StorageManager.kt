@@ -46,13 +46,18 @@ class StorageManager @Inject constructor(
      * 初始化存储目录
      */
     fun init() {
-        recordingsDir.mkdirs()
+        Log.d(TAG, "Initializing storage at: ${recordingsDir.absolutePath}")
+        
+        val created = recordingsDir.mkdirs()
+        Log.d(TAG, "Main directory created: $created, exists: ${recordingsDir.exists()}, canWrite: ${recordingsDir.canWrite()}")
+        
         File(recordingsDir, "pending").mkdirs()
         File(recordingsDir, "processing").mkdirs()
         File(recordingsDir, "completed").mkdirs()
         File(recordingsDir, "failed").mkdirs()
 
         Log.d(TAG, "Storage manager initialized: ${recordingsDir.absolutePath}")
+        Log.d(TAG, "Directory writable: ${recordingsDir.canWrite()}")
     }
 
     /**

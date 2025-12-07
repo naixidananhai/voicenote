@@ -28,7 +28,7 @@ class VadDetector(
     private var vadEngine: SileroVadEngine? = null
 
     // VAD参数
-    private val voiceThreshold = 0.5f  // 人声概率阈值
+    private val voiceThreshold = 0.3f  // 人声概率阈值（降低以提高灵敏度）
     private val minVoiceFrames = 3     // 连续3帧才触发开始
     private val minSilenceFrames = 30  // 约2秒静音才结束
 
@@ -98,7 +98,9 @@ class VadDetector(
                 // 触发人声开始
                 isVoiceActive = true
                 callback.onVoiceStart()
-                Log.d(TAG, "Voice activity started (prob: $probability)")
+                Log.i(TAG, "🎤 Voice activity started (prob: $probability, threshold: $voiceThreshold)")
+            } else if (isVoiceActive && consecutiveVoiceFrames % 50 == 0) {
+                Log.d(TAG, "Voice continues (prob: $probability, frames: $consecutiveVoiceFrames)")
             }
         } else {
             // 静音
@@ -109,7 +111,9 @@ class VadDetector(
                 // 触发人声结束
                 isVoiceActive = false
                 callback.onVoiceEnd()
-                Log.d(TAG, "Voice activity ended (prob: $probability)")
+                Log.i(TAG, "🔇 Voice activity ended (prob: $probability)")
+            } else if (isVoiceActive && consecutiveSilenceFrames % 10 == 0) {
+                Log.d(TAG, "Silence detected (prob: $probability, frames: $consecutiveSilenceFrames/$minSilenceFrames)")
             }
         }
     }

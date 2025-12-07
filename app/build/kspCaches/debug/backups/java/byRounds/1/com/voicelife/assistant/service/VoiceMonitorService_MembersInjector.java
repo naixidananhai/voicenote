@@ -2,6 +2,7 @@ package com.voicelife.assistant.service;
 
 import com.voicelife.assistant.data.repository.RecordingRepository;
 import com.voicelife.assistant.storage.StorageManager;
+import com.voicelife.assistant.transcription.TranscriptionService;
 import com.voicelife.assistant.utils.DebugLogger;
 import com.voicelife.assistant.utils.NotificationHelper;
 import dagger.MembersInjector;
@@ -32,21 +33,26 @@ public final class VoiceMonitorService_MembersInjector implements MembersInjecto
 
   private final Provider<DebugLogger> debugLoggerProvider;
 
+  private final Provider<TranscriptionService> transcriptionServiceProvider;
+
   public VoiceMonitorService_MembersInjector(
       Provider<NotificationHelper> notificationHelperProvider,
       Provider<RecordingRepository> recordingRepositoryProvider,
-      Provider<StorageManager> storageManagerProvider, Provider<DebugLogger> debugLoggerProvider) {
+      Provider<StorageManager> storageManagerProvider, Provider<DebugLogger> debugLoggerProvider,
+      Provider<TranscriptionService> transcriptionServiceProvider) {
     this.notificationHelperProvider = notificationHelperProvider;
     this.recordingRepositoryProvider = recordingRepositoryProvider;
     this.storageManagerProvider = storageManagerProvider;
     this.debugLoggerProvider = debugLoggerProvider;
+    this.transcriptionServiceProvider = transcriptionServiceProvider;
   }
 
   public static MembersInjector<VoiceMonitorService> create(
       Provider<NotificationHelper> notificationHelperProvider,
       Provider<RecordingRepository> recordingRepositoryProvider,
-      Provider<StorageManager> storageManagerProvider, Provider<DebugLogger> debugLoggerProvider) {
-    return new VoiceMonitorService_MembersInjector(notificationHelperProvider, recordingRepositoryProvider, storageManagerProvider, debugLoggerProvider);
+      Provider<StorageManager> storageManagerProvider, Provider<DebugLogger> debugLoggerProvider,
+      Provider<TranscriptionService> transcriptionServiceProvider) {
+    return new VoiceMonitorService_MembersInjector(notificationHelperProvider, recordingRepositoryProvider, storageManagerProvider, debugLoggerProvider, transcriptionServiceProvider);
   }
 
   @Override
@@ -55,6 +61,7 @@ public final class VoiceMonitorService_MembersInjector implements MembersInjecto
     injectRecordingRepository(instance, recordingRepositoryProvider.get());
     injectStorageManager(instance, storageManagerProvider.get());
     injectDebugLogger(instance, debugLoggerProvider.get());
+    injectTranscriptionService(instance, transcriptionServiceProvider.get());
   }
 
   @InjectedFieldSignature("com.voicelife.assistant.service.VoiceMonitorService.notificationHelper")
@@ -78,5 +85,11 @@ public final class VoiceMonitorService_MembersInjector implements MembersInjecto
   @InjectedFieldSignature("com.voicelife.assistant.service.VoiceMonitorService.debugLogger")
   public static void injectDebugLogger(VoiceMonitorService instance, DebugLogger debugLogger) {
     instance.debugLogger = debugLogger;
+  }
+
+  @InjectedFieldSignature("com.voicelife.assistant.service.VoiceMonitorService.transcriptionService")
+  public static void injectTranscriptionService(VoiceMonitorService instance,
+      TranscriptionService transcriptionService) {
+    instance.transcriptionService = transcriptionService;
   }
 }

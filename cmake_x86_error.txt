@@ -1,0 +1,37 @@
+﻿Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+> Task :whisper-lib:preBuild UP-TO-DATE
+> Task :whisper-lib:preDebugBuild UP-TO-DATE
+> Task :whisper-lib:configureCMakeDebug[arm64-v8a]
+> Task :whisper-lib:buildCMakeDebug[arm64-v8a]
+> Task :whisper-lib:configureCMakeDebug[armeabi-v7a]
+> Task :whisper-lib:buildCMakeDebug[armeabi-v7a]
+> Task :whisper-lib:configureCMakeDebug[x86_64]
+
+> Task :whisper-lib:buildCMakeDebug[x86_64]
+C/C++: ninja: Entering directory `C:\Users\yangyayuan\Desktop\yu\whisper-lib\.cxx\Debug\6g5r4515\x86_64'
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/jni.c:94:15: warning: 'whisper_init' is deprecated: use whisper_init_with_params instead [-Wdeprecated-declarations]
+C/C++:    94 |     context = whisper_init(&loader);
+C/C++:       |               ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:224:5: note: 'whisper_init' has been explicitly marked deprecated here
+C/C++:   224 |     WHISPER_DEPRECATED(
+C/C++:       |     ^
+C/C++: C:/Users/yangyayuan/Desktop/yu/whisper-lib/src/main/jni/whisper/../whisper-cpp/include/whisper.h:12:64: note: expanded from macro 'WHISPER_DEPRECATED'
+C/C++:    12 | #    define WHISPER_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+C/C++:       |                                                                ^
+C/C++: 1 warning generated.
+
+> Task :whisper-lib:buildCMakeDebug
+
+BUILD SUCCESSFUL in 28s
+6 actionable tasks: 6 executed

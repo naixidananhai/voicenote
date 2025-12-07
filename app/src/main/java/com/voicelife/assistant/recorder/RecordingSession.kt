@@ -54,20 +54,40 @@ class RecordingSession(
 
         // 开始新的录音
         val timestamp = dateFormat.format(Date())
-        currentFile = File(recordingsDir, "pending/voice_$timestamp.wav")
-        currentFile?.parentFile?.mkdirs()
+        val pendingDir = File(recordingsDir, "pending")
+        
+        // 确保目录存在
+        if (!pendingDir.exists()) {
+            val created = pendingDir.mkdirs()
+            Log.d(TAG, "Created pending directory: $created, path: ${pendingDir.absolutePath}")
+            debugLogger?.d(TAG, "创建pending目录: $created")
+        }
+        
+        currentFile = File(pendingDir, "voice_$timestamp.wav")
+        Log.d(TAG, "Creating recording file: ${currentFile?.absolutePath}")
+        debugLogger?.d(TAG, "准备创建文件: ${currentFile?.name}")
 
-        wavWriter = WavFileWriter(currentFile!!)
-        wavWriter?.start()
+        try {
+            wavWriter = WavFileWriter(currentFile!!)
+            wavWriter?.start()
+            Log.i(TAG, "✅ WAV writer started successfully")
+            debugLogger?.i(TAG, "✅ WAV写入器启动成功")
+        } catch (e: Exception) {
+            Log.e(TAG, "❌ Failed to start WAV writer: ${e.message}", e)
+            debugLogger?.e(TAG, "❌ WAV写入器启动失败: ${e.message}")
+            throw e
+        }
 
         // 写入预缓冲数据
         val preBufferData = preBuffer.read()
         if (preBufferData.isNotEmpty()) {
             wavWriter?.write(preBufferData)
+            Log.d(TAG, "Pre-buffer written: ${preBufferData.size} samples")
+            debugLogger?.d(TAG, "预缓冲已写入: ${preBufferData.size} 样本")
         }
 
         lastVoiceTime = System.currentTimeMillis()
-        Log.d(TAG, "Recording started: ${currentFile?.name}")
+        Log.i(TAG, "📝 Recording started: ${currentFile?.name}")
         debugLogger?.i(TAG, "📝 开始录音: ${currentFile?.name}")
     }
 

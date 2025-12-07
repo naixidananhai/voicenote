@@ -5,6 +5,7 @@ import com.voicelife.assistant.di.DatabaseModule;
 import com.voicelife.assistant.service.VoiceMonitorService_GeneratedInjector;
 import com.voicelife.assistant.ui.main.MainActivity_GeneratedInjector;
 import com.voicelife.assistant.ui.viewmodel.MainViewModel_HiltModules;
+import com.voicelife.assistant.ui.viewmodel.RecordingsViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -159,6 +160,7 @@ public final class VoiceAssistantApp_HiltComponents {
       modules = {
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           MainViewModel_HiltModules.KeyModule.class,
+          RecordingsViewModel_HiltModules.KeyModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class
       }
@@ -197,7 +199,8 @@ public final class VoiceAssistantApp_HiltComponents {
   @Subcomponent(
       modules = {
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          MainViewModel_HiltModules.BindsModule.class
+          MainViewModel_HiltModules.BindsModule.class,
+          RecordingsViewModel_HiltModules.BindsModule.class
       }
   )
   @ViewModelScoped

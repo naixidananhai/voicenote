@@ -1,0 +1,145 @@
+﻿Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+> Task :whisper-lib:preBuild UP-TO-DATE
+> Task :whisper-lib:preDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :whisper-lib:writeDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:generateDebugResources UP-TO-DATE
+> Task :whisper-lib:packageDebugResources UP-TO-DATE
+> Task :whisper-lib:extractDeepLinksDebug UP-TO-DATE
+> Task :whisper-lib:processDebugManifest UP-TO-DATE
+> Task :whisper-lib:compileDebugLibraryResources UP-TO-DATE
+> Task :whisper-lib:parseDebugLocalResources UP-TO-DATE
+> Task :whisper-lib:generateDebugRFile UP-TO-DATE
+> Task :whisper-lib:checkKotlinGradlePluginConfigurationErrors
+> Task :whisper-lib:compileDebugKotlin UP-TO-DATE
+> Task :whisper-lib:javaPreCompileDebug UP-TO-DATE
+> Task :whisper-lib:compileDebugJavaWithJavac NO-SOURCE
+> Task :whisper-lib:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin UP-TO-DATE
+
+> Task :app:compileDebugKotlin FAILED
+.\gradlew : e: file:///C:/Users/yangyayuan/Desktop/yu/app/s
+rc/main/java/com/voicelife/assistant/ui/recordings/Recordin
+gsScreen.kt:19:45 Unresolved reference: DateFilter
+所在位置 行:1 字符: 1
++ .\gradlew :app:compileDebugKotlin 2>&1 | Out-File -FilePa
+th compile_e ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (e: file:///C: 
+   /U...nce: DateFilter:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+49:58 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+49:72 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+54:41 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+54:55 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+74:29 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+74:43 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+85:55 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+88:62 Unresolved reference: setDateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+88:76 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+109:49 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+109:63 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+147:37 Unresolved reference: dateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+148:34 Cannot infer a type for this parameter. Please speci
+fy it explicitly.
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+149:27 Unresolved reference: setDateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+162:20 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+163:24 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+171:17 Unresolved reference: DateFilter
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+171:37 Overload resolution ambiguity: 
+public inline fun <T> Iterable<TypeVariable(T)>.forEach(act
+ion: (TypeVariable(T)) -> Unit): Unit defined in kotlin.col
+lections
+public inline fun <K, V> Map<out TypeVariable(K), TypeVaria
+ble(V)>.forEach(action: (Map.Entry<TypeVariable(K), TypeVar
+iable(V)>) -> Unit): Unit defined in kotlin.collections
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+171:47 Cannot infer a type for this parameter. Please speci
+fy it explicitly.
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java
+/com/voicelife/assistant/ui/recordings/RecordingsScreen.kt:
+172:21 @Composable invocations can only happen from the con
+text of a @Composable function
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.c
+ompilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinC
+ompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 8s
+27 actionable tasks: 3 executed, 24 up-to-date

@@ -70,3 +70,4 @@ com.voicelife.assistant.app-packageDebugResources-68 C:\Users\yangyayuan\Desktop
 com.voicelife.assistant.app-merged_res-69 C:\Users\yangyayuan\Desktop\yu\app\build\intermediates\merged_res\debug
 com.voicelife.assistant.app-debug-70 C:\Users\yangyayuan\Desktop\yu\app\src\debug\res
 com.voicelife.assistant.app-main-71 C:\Users\yangyayuan\Desktop\yu\app\src\main\res
+com.voicelife.assistant.app-packaged_res-72 C:\Users\yangyayuan\Desktop\yu\whisper-lib\build\intermediates\packaged_res\debug

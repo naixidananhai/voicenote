@@ -68,6 +68,10 @@ class MainViewModel @Inject constructor(
                 val missingPermissions = permissionManager.getMissingPermissions()
                 debugLogger.i("MainViewModel", "权限检查: ${if (hasPermissions) "已授予" else "缺少${missingPermissions.size}个权限"}")
 
+                // 检查服务是否真的在运行
+                val isServiceRunning = isServiceRunning()
+                debugLogger.d("MainViewModel", "服务状态: ${if (isServiceRunning) "运行中" else "已停止"}")
+
                 // 获取录音文件路径
                 val recordingsPath = storageManager.getRecordingsDir().absolutePath
 
@@ -77,7 +81,8 @@ class MainViewModel @Inject constructor(
                     storageInfo = storage,
                     hasAllPermissions = hasPermissions,
                     missingPermissions = missingPermissions,
-                    recordingsPath = recordingsPath
+                    recordingsPath = recordingsPath,
+                    isServiceRunning = isServiceRunning
                 )
             } catch (e: Exception) {
                 debugLogger.e("MainViewModel", "加载数据失败: ${e.message}")
@@ -260,6 +265,47 @@ class MainViewModel @Inject constructor(
             stopService()
         } else {
             startService()
+        }
+    }
+
+    /**
+     * 检查服务是否正在运行
+     */
+    private fun isServiceRunning(): Boolean {
+        val manager = getApplication<Application>().getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+        @Suppress("DEPRECATION")
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (VoiceMonitorService::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * 检查并重启服务
+     * 如果服务应该运行但实际没有运行，则自动重启
+     */
+    fun checkAndRestartService() {
+        viewModelScope.launch {
+            try {
+                // 检查服务是否应该运行
+                val prefs = getApplication<Application>().getSharedPreferences("voice_assistant_prefs", Context.MODE_PRIVATE)
+                val shouldRun = prefs.getBoolean("service_was_running", false)
+                
+                // 检查服务是否真的在运行
+                val isRunning = isServiceRunning()
+                
+                debugLogger.d("MainViewModel", "服务检查: 应该运行=$shouldRun, 实际运行=$isRunning")
+                
+                if (shouldRun && !isRunning) {
+                    // 服务应该运行但没有运行，自动重启
+                    debugLogger.w("MainViewModel", "⚠️ 检测到服务异常停止，自动重启...")
+                    startService()
+                }
+            } catch (e: Exception) {
+                debugLogger.e("MainViewModel", "检查服务失败: ${e.message}")
+            }
         }
     }
 

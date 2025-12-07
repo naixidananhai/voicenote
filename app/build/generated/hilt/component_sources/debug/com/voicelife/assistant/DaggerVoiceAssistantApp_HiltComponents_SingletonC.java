@@ -21,9 +21,12 @@ import com.voicelife.assistant.di.DatabaseModule_ProvideTranscriptionDaoFactory;
 import com.voicelife.assistant.service.VoiceMonitorService;
 import com.voicelife.assistant.service.VoiceMonitorService_MembersInjector;
 import com.voicelife.assistant.storage.StorageManager;
+import com.voicelife.assistant.transcription.TranscriptionService;
 import com.voicelife.assistant.ui.main.MainActivity;
 import com.voicelife.assistant.ui.viewmodel.MainViewModel;
 import com.voicelife.assistant.ui.viewmodel.MainViewModel_HiltModules_KeyModule_ProvideFactory;
+import com.voicelife.assistant.ui.viewmodel.RecordingsViewModel;
+import com.voicelife.assistant.ui.viewmodel.RecordingsViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.voicelife.assistant.utils.DebugLogger;
 import com.voicelife.assistant.utils.NotificationHelper;
 import com.voicelife.assistant.utils.PermissionManager;
@@ -45,7 +48,9 @@ import dagger.hilt.android.internal.modules.ApplicationContextModule_ProvideAppl
 import dagger.hilt.android.internal.modules.ApplicationContextModule_ProvideContextFactory;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.DoubleCheck;
+import dagger.internal.MapBuilder;
 import dagger.internal.Preconditions;
+import dagger.internal.SetBuilder;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -401,7 +406,7 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
 
     @Override
     public Set<String> getViewModelKeys() {
-      return Collections.<String>singleton(MainViewModel_HiltModules_KeyModule_ProvideFactory.provide());
+      return SetBuilder.<String>newSetBuilder(2).add(MainViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(RecordingsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).build();
     }
 
     @Override
@@ -429,6 +434,8 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
 
     private Provider<MainViewModel> mainViewModelProvider;
 
+    private Provider<RecordingsViewModel> recordingsViewModelProvider;
+
     private ViewModelCImpl(SingletonCImpl singletonCImpl,
         ActivityRetainedCImpl activityRetainedCImpl, SavedStateHandle savedStateHandleParam,
         ViewModelLifecycle viewModelLifecycleParam) {
@@ -443,11 +450,12 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
     private void initialize(final SavedStateHandle savedStateHandleParam,
         final ViewModelLifecycle viewModelLifecycleParam) {
       this.mainViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
+      this.recordingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
     }
 
     @Override
     public Map<String, Provider<ViewModel>> getHiltViewModelMap() {
-      return Collections.<String, Provider<ViewModel>>singletonMap("com.voicelife.assistant.ui.viewmodel.MainViewModel", ((Provider) mainViewModelProvider));
+      return MapBuilder.<String, Provider<ViewModel>>newMapBuilder(2).put("com.voicelife.assistant.ui.viewmodel.MainViewModel", ((Provider) mainViewModelProvider)).put("com.voicelife.assistant.ui.viewmodel.RecordingsViewModel", ((Provider) recordingsViewModelProvider)).build();
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -473,6 +481,9 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
         switch (id) {
           case 0: // com.voicelife.assistant.ui.viewmodel.MainViewModel 
           return (T) new MainViewModel(ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule), singletonCImpl.permissionManagerProvider.get(), singletonCImpl.recordingRepositoryProvider.get(), singletonCImpl.storageManagerProvider.get(), singletonCImpl.debugLoggerProvider.get());
+
+          case 1: // com.voicelife.assistant.ui.viewmodel.RecordingsViewModel 
+          return (T) new RecordingsViewModel(ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule), singletonCImpl.recordingRepositoryProvider.get(), singletonCImpl.debugLoggerProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -558,6 +569,7 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
       VoiceMonitorService_MembersInjector.injectRecordingRepository(instance, singletonCImpl.recordingRepositoryProvider.get());
       VoiceMonitorService_MembersInjector.injectStorageManager(instance, singletonCImpl.storageManagerProvider.get());
       VoiceMonitorService_MembersInjector.injectDebugLogger(instance, singletonCImpl.debugLoggerProvider.get());
+      VoiceMonitorService_MembersInjector.injectTranscriptionService(instance, singletonCImpl.transcriptionServiceProvider.get());
       return instance;
     }
   }
@@ -580,6 +592,8 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
     private Provider<DebugLogger> debugLoggerProvider;
 
     private Provider<NotificationHelper> notificationHelperProvider;
+
+    private Provider<TranscriptionService> transcriptionServiceProvider;
 
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
@@ -604,6 +618,7 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
       this.storageManagerProvider = DoubleCheck.provider(new SwitchingProvider<StorageManager>(singletonCImpl, 4));
       this.debugLoggerProvider = DoubleCheck.provider(new SwitchingProvider<DebugLogger>(singletonCImpl, 5));
       this.notificationHelperProvider = DoubleCheck.provider(new SwitchingProvider<NotificationHelper>(singletonCImpl, 6));
+      this.transcriptionServiceProvider = DoubleCheck.provider(new SwitchingProvider<TranscriptionService>(singletonCImpl, 7));
     }
 
     @Override
@@ -659,6 +674,9 @@ public final class DaggerVoiceAssistantApp_HiltComponents_SingletonC {
 
           case 6: // com.voicelife.assistant.utils.NotificationHelper 
           return (T) new NotificationHelper(singletonCImpl.provideContextProvider.get());
+
+          case 7: // com.voicelife.assistant.transcription.TranscriptionService 
+          return (T) new TranscriptionService(singletonCImpl.provideContextProvider.get(), singletonCImpl.recordingRepositoryProvider.get(), singletonCImpl.debugLoggerProvider.get());
 
           default: throw new AssertionError(id);
         }

@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,11 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.voicelife.assistant.ui.viewmodel.MainViewModel
+import com.voicelife.assistant.ui.viewmodel.RecordingsViewModel
+import com.voicelife.assistant.ui.recordings.RecordingsScreen
 import com.voicelife.assistant.utils.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 /**
  * 主Activity
@@ -33,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private val recordingsViewModel: RecordingsViewModel by viewModels()
 
     // 权限请求启动器
     private val permissionLauncher = registerForActivityResult(
@@ -45,18 +51,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            var showRecordingsList by remember { mutableStateOf(false) }
+
             MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(
-                        viewModel = viewModel,
-                        onRequestPermissions = { requestPermissions() }
-                    )
+                    if (showRecordingsList) {
+                        RecordingsScreen(
+                            viewModel = recordingsViewModel,
+                            onBack = { showRecordingsList = false }
+                        )
+                    } else {
+                        MainScreen(
+                            viewModel = viewModel,
+                            onRequestPermissions = { requestPermissions() },
+                            onShowRecordings = { showRecordingsList = true }
+                        )
+                    }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 每次回到前台时重新加载数据和检查服务状态
+        viewModel.loadData()
+        
+        // 检查服务状态并自动重启
+        viewModel.checkAndRestartService()
     }
 
     /**
@@ -65,12 +90,12 @@ class MainActivity : ComponentActivity() {
     private fun requestPermissions() {
         val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
 
-        // Android 13+ 需要通知权限和音频权限
+        // Android 13+ 需要通知权限
+        // 注意：写入Download目录不需要READ_MEDIA_AUDIO权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-            permissions.add(Manifest.permission.READ_MEDIA_AUDIO)
-        } else {
-            // Android 12及以下需要存储权限
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Android 6-12 需要存储权限
             permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
@@ -85,7 +110,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onRequestPermissions: () -> Unit
+    onRequestPermissions: () -> Unit,
+    onShowRecordings: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val logs by viewModel.logs.collectAsState()
@@ -126,7 +152,8 @@ fun MainScreen(
                 totalDuration = stats.getTotalDurationMinutes(),
                 pendingCount = stats.pendingCount,
                 totalSize = stats.getTotalSizeMB(),
-                onRefresh = { viewModel.loadData() }
+                onRefresh = { viewModel.loadData() },
+                onShowRecordings = onShowRecordings
             )
         }
 
@@ -264,24 +291,31 @@ fun ServiceControlCard(
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                // 状态指示器
-                Surface(
-                    shape = MaterialTheme.shapes.small,
-                    color = if (isRunning) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant
-                    },
-                    modifier = Modifier.size(12.dp)
-                ) {}
+                // 状态指示器 - 运行时有呼吸动画
+                if (isRunning) {
+                    PulsingIndicator()
+                } else {
+                    Surface(
+                        shape = MaterialTheme.shapes.small,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.size(12.dp)
+                    ) {}
+                }
             }
 
             Button(
                 onClick = onToggleService,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = hasPermissions
+                enabled = hasPermissions,
+                colors = if (isRunning) {
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                } else {
+                    ButtonDefaults.buttonColors()
+                }
             ) {
-                Text(if (isRunning) "停止监听" else "开始监听")
+                Text(if (isRunning) "停止聆听" else "开始聆听")
             }
 
             if (!hasPermissions) {
@@ -289,6 +323,12 @@ fun ServiceControlCard(
                     text = "请先授予所需权限",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error
+                )
+            } else if (isRunning) {
+                Text(
+                    text = "✅ 服务正在后台运行，24小时聆听中...",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -304,8 +344,17 @@ fun StatisticsCard(
     totalDuration: Int,
     pendingCount: Int,
     totalSize: Long,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onShowRecordings: () -> Unit
 ) {
+    // 自动刷新 - 每10秒刷新一次
+    LaunchedEffect(Unit) {
+        while (true) {
+            kotlinx.coroutines.delay(10000) // 10秒
+            onRefresh()
+        }
+    }
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -316,29 +365,82 @@ fun StatisticsCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "录音统计",
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "录音统计",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    // 自动刷新指示器
+                    Text(
+                        text = "• 自动刷新",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
                 TextButton(onClick = onRefresh) {
                     Text("🔄 刷新")
                 }
             }
 
-            StatRow("总录音数", "$totalCount 段")
-            StatRow("总时长", "$totalDuration 分钟")
-            StatRow("待处理", "$pendingCount 个")
-            StatRow("占用空间", "$totalSize MB")
+            AnimatedStatRow("总录音数", totalCount, "段")
+            AnimatedStatRow("总时长", totalDuration, "分钟")
+            AnimatedStatRow("待处理", pendingCount, "个")
+            AnimatedStatRow("占用空间", totalSize.toInt(), "MB")
             
             if (totalCount == 0) {
                 Text(
-                    text = "💡 提示：开始监听并说话后，录音会自动保存",
+                    text = "💡 提示：开始聆听并说话后，录音会自动保存",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
+            
+            // 查看录音列表按钮 - 始终显示
+            Button(
+                onClick = onShowRecordings,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            ) {
+                Text("📝 查看录音列表")
+            }
         }
+    }
+}
+
+/**
+ * 带动画的统计行
+ */
+@Composable
+fun AnimatedStatRow(label: String, value: Int, unit: String) {
+    // 数字动画
+    val animatedValue by androidx.compose.animation.core.animateIntAsState(
+        targetValue = value,
+        animationSpec = androidx.compose.animation.core.tween(
+            durationMillis = 500,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "stat_$label"
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = "$animatedValue $unit",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+        )
     }
 }
 
@@ -354,6 +456,20 @@ fun StorageCard(
     onCleanup: () -> Unit,
     onOpenFolder: () -> Unit
 ) {
+    // 计算使用百分比
+    val totalMB = availableMB + usedMB
+    val usagePercent = if (totalMB > 0) (usedMB.toFloat() / totalMB.toFloat()) else 0f
+    
+    // 动画进度
+    val animatedProgress by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = usagePercent,
+        animationSpec = androidx.compose.animation.core.tween(
+            durationMillis = 800,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "storage_progress"
+    )
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -364,8 +480,45 @@ fun StorageCard(
                 style = MaterialTheme.typography.titleMedium
             )
 
-            StatRow("可用空间", "$availableMB MB")
-            StatRow("已使用", "$usedMB MB")
+            // 存储进度条
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "已使用 $usedMB MB",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "${(animatedProgress * 100).toInt()}%",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    )
+                }
+                
+                LinearProgressIndicator(
+                    progress = animatedProgress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
+                    color = if (hasEnoughSpace) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    }
+                )
+                
+                Text(
+                    text = "可用空间 $availableMB MB",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             // 显示录音文件路径
             recordingsPath?.let { path ->
@@ -488,6 +641,29 @@ fun DebugLogCard(
             }
         }
     }
+}
+
+/**
+ * 呼吸动画指示器
+ */
+@Composable
+fun PulsingIndicator() {
+    val infiniteTransition = androidx.compose.animation.core.rememberInfiniteTransition(label = "pulse")
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 1f,
+        animationSpec = androidx.compose.animation.core.infiniteRepeatable(
+            animation = androidx.compose.animation.core.tween(1000, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+            repeatMode = androidx.compose.animation.core.RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
+
+    Surface(
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
+        modifier = Modifier.size(12.dp)
+    ) {}
 }
 
 /**

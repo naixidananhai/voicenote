@@ -25,7 +25,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "voice_assistant_db"
-        ).build()
+        )
+        .fallbackToDestructiveMigration()  // 开发阶段使用，生产环境需要proper migration
+        .build()
     }
 
     @Provides

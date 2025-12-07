@@ -53,7 +53,7 @@ public final class RecordingDao_Impl implements RecordingDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR ABORT INTO `recordings` (`id`,`filePath`,`duration`,`fileSize`,`createdAt`,`transcriptionStatus`,`transcribedAt`,`deleteAt`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `recordings` (`id`,`filePath`,`duration`,`fileSize`,`createdAt`,`transcriptionStatus`,`transcriptionText`,`transcribedAt`,`deleteAt`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -66,12 +66,17 @@ public final class RecordingDao_Impl implements RecordingDao {
         statement.bindLong(5, entity.getCreatedAt());
         final String _tmp = __converters.fromTranscriptionStatus(entity.getTranscriptionStatus());
         statement.bindString(6, _tmp);
-        if (entity.getTranscribedAt() == null) {
+        if (entity.getTranscriptionText() == null) {
           statement.bindNull(7);
         } else {
-          statement.bindLong(7, entity.getTranscribedAt());
+          statement.bindString(7, entity.getTranscriptionText());
         }
-        statement.bindLong(8, entity.getDeleteAt());
+        if (entity.getTranscribedAt() == null) {
+          statement.bindNull(8);
+        } else {
+          statement.bindLong(8, entity.getTranscribedAt());
+        }
+        statement.bindLong(9, entity.getDeleteAt());
       }
     };
     this.__deletionAdapterOfRecording = new EntityDeletionOrUpdateAdapter<Recording>(__db) {
@@ -91,7 +96,7 @@ public final class RecordingDao_Impl implements RecordingDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `recordings` SET `id` = ?,`filePath` = ?,`duration` = ?,`fileSize` = ?,`createdAt` = ?,`transcriptionStatus` = ?,`transcribedAt` = ?,`deleteAt` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `recordings` SET `id` = ?,`filePath` = ?,`duration` = ?,`fileSize` = ?,`createdAt` = ?,`transcriptionStatus` = ?,`transcriptionText` = ?,`transcribedAt` = ?,`deleteAt` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -104,13 +109,18 @@ public final class RecordingDao_Impl implements RecordingDao {
         statement.bindLong(5, entity.getCreatedAt());
         final String _tmp = __converters.fromTranscriptionStatus(entity.getTranscriptionStatus());
         statement.bindString(6, _tmp);
-        if (entity.getTranscribedAt() == null) {
+        if (entity.getTranscriptionText() == null) {
           statement.bindNull(7);
         } else {
-          statement.bindLong(7, entity.getTranscribedAt());
+          statement.bindString(7, entity.getTranscriptionText());
         }
-        statement.bindLong(8, entity.getDeleteAt());
-        statement.bindLong(9, entity.getId());
+        if (entity.getTranscribedAt() == null) {
+          statement.bindNull(8);
+        } else {
+          statement.bindLong(8, entity.getTranscribedAt());
+        }
+        statement.bindLong(9, entity.getDeleteAt());
+        statement.bindLong(10, entity.getId());
       }
     };
     this.__preparedStmtOfDeleteExpired = new SharedSQLiteStatement(__db) {
@@ -222,6 +232,7 @@ public final class RecordingDao_Impl implements RecordingDao {
           final int _cursorIndexOfFileSize = CursorUtil.getColumnIndexOrThrow(_cursor, "fileSize");
           final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
           final int _cursorIndexOfTranscriptionStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionStatus");
+          final int _cursorIndexOfTranscriptionText = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionText");
           final int _cursorIndexOfTranscribedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "transcribedAt");
           final int _cursorIndexOfDeleteAt = CursorUtil.getColumnIndexOrThrow(_cursor, "deleteAt");
           final Recording _result;
@@ -240,6 +251,12 @@ public final class RecordingDao_Impl implements RecordingDao {
             final String _tmp;
             _tmp = _cursor.getString(_cursorIndexOfTranscriptionStatus);
             _tmpTranscriptionStatus = __converters.toTranscriptionStatus(_tmp);
+            final String _tmpTranscriptionText;
+            if (_cursor.isNull(_cursorIndexOfTranscriptionText)) {
+              _tmpTranscriptionText = null;
+            } else {
+              _tmpTranscriptionText = _cursor.getString(_cursorIndexOfTranscriptionText);
+            }
             final Long _tmpTranscribedAt;
             if (_cursor.isNull(_cursorIndexOfTranscribedAt)) {
               _tmpTranscribedAt = null;
@@ -248,7 +265,7 @@ public final class RecordingDao_Impl implements RecordingDao {
             }
             final long _tmpDeleteAt;
             _tmpDeleteAt = _cursor.getLong(_cursorIndexOfDeleteAt);
-            _result = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscribedAt,_tmpDeleteAt);
+            _result = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscriptionText,_tmpTranscribedAt,_tmpDeleteAt);
           } else {
             _result = null;
           }
@@ -277,6 +294,7 @@ public final class RecordingDao_Impl implements RecordingDao {
           final int _cursorIndexOfFileSize = CursorUtil.getColumnIndexOrThrow(_cursor, "fileSize");
           final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
           final int _cursorIndexOfTranscriptionStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionStatus");
+          final int _cursorIndexOfTranscriptionText = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionText");
           final int _cursorIndexOfTranscribedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "transcribedAt");
           final int _cursorIndexOfDeleteAt = CursorUtil.getColumnIndexOrThrow(_cursor, "deleteAt");
           final List<Recording> _result = new ArrayList<Recording>(_cursor.getCount());
@@ -296,6 +314,12 @@ public final class RecordingDao_Impl implements RecordingDao {
             final String _tmp;
             _tmp = _cursor.getString(_cursorIndexOfTranscriptionStatus);
             _tmpTranscriptionStatus = __converters.toTranscriptionStatus(_tmp);
+            final String _tmpTranscriptionText;
+            if (_cursor.isNull(_cursorIndexOfTranscriptionText)) {
+              _tmpTranscriptionText = null;
+            } else {
+              _tmpTranscriptionText = _cursor.getString(_cursorIndexOfTranscriptionText);
+            }
             final Long _tmpTranscribedAt;
             if (_cursor.isNull(_cursorIndexOfTranscribedAt)) {
               _tmpTranscribedAt = null;
@@ -304,7 +328,7 @@ public final class RecordingDao_Impl implements RecordingDao {
             }
             final long _tmpDeleteAt;
             _tmpDeleteAt = _cursor.getLong(_cursorIndexOfDeleteAt);
-            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscribedAt,_tmpDeleteAt);
+            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscriptionText,_tmpTranscribedAt,_tmpDeleteAt);
             _result.add(_item);
           }
           return _result;
@@ -341,6 +365,7 @@ public final class RecordingDao_Impl implements RecordingDao {
           final int _cursorIndexOfFileSize = CursorUtil.getColumnIndexOrThrow(_cursor, "fileSize");
           final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
           final int _cursorIndexOfTranscriptionStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionStatus");
+          final int _cursorIndexOfTranscriptionText = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionText");
           final int _cursorIndexOfTranscribedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "transcribedAt");
           final int _cursorIndexOfDeleteAt = CursorUtil.getColumnIndexOrThrow(_cursor, "deleteAt");
           final List<Recording> _result = new ArrayList<Recording>(_cursor.getCount());
@@ -360,6 +385,12 @@ public final class RecordingDao_Impl implements RecordingDao {
             final String _tmp_1;
             _tmp_1 = _cursor.getString(_cursorIndexOfTranscriptionStatus);
             _tmpTranscriptionStatus = __converters.toTranscriptionStatus(_tmp_1);
+            final String _tmpTranscriptionText;
+            if (_cursor.isNull(_cursorIndexOfTranscriptionText)) {
+              _tmpTranscriptionText = null;
+            } else {
+              _tmpTranscriptionText = _cursor.getString(_cursorIndexOfTranscriptionText);
+            }
             final Long _tmpTranscribedAt;
             if (_cursor.isNull(_cursorIndexOfTranscribedAt)) {
               _tmpTranscribedAt = null;
@@ -368,7 +399,7 @@ public final class RecordingDao_Impl implements RecordingDao {
             }
             final long _tmpDeleteAt;
             _tmpDeleteAt = _cursor.getLong(_cursorIndexOfDeleteAt);
-            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscribedAt,_tmpDeleteAt);
+            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscriptionText,_tmpTranscribedAt,_tmpDeleteAt);
             _result.add(_item);
           }
           return _result;
@@ -400,6 +431,7 @@ public final class RecordingDao_Impl implements RecordingDao {
           final int _cursorIndexOfFileSize = CursorUtil.getColumnIndexOrThrow(_cursor, "fileSize");
           final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
           final int _cursorIndexOfTranscriptionStatus = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionStatus");
+          final int _cursorIndexOfTranscriptionText = CursorUtil.getColumnIndexOrThrow(_cursor, "transcriptionText");
           final int _cursorIndexOfTranscribedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "transcribedAt");
           final int _cursorIndexOfDeleteAt = CursorUtil.getColumnIndexOrThrow(_cursor, "deleteAt");
           final List<Recording> _result = new ArrayList<Recording>(_cursor.getCount());
@@ -419,6 +451,12 @@ public final class RecordingDao_Impl implements RecordingDao {
             final String _tmp;
             _tmp = _cursor.getString(_cursorIndexOfTranscriptionStatus);
             _tmpTranscriptionStatus = __converters.toTranscriptionStatus(_tmp);
+            final String _tmpTranscriptionText;
+            if (_cursor.isNull(_cursorIndexOfTranscriptionText)) {
+              _tmpTranscriptionText = null;
+            } else {
+              _tmpTranscriptionText = _cursor.getString(_cursorIndexOfTranscriptionText);
+            }
             final Long _tmpTranscribedAt;
             if (_cursor.isNull(_cursorIndexOfTranscribedAt)) {
               _tmpTranscribedAt = null;
@@ -427,7 +465,7 @@ public final class RecordingDao_Impl implements RecordingDao {
             }
             final long _tmpDeleteAt;
             _tmpDeleteAt = _cursor.getLong(_cursorIndexOfDeleteAt);
-            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscribedAt,_tmpDeleteAt);
+            _item = new Recording(_tmpId,_tmpFilePath,_tmpDuration,_tmpFileSize,_tmpCreatedAt,_tmpTranscriptionStatus,_tmpTranscriptionText,_tmpTranscribedAt,_tmpDeleteAt);
             _result.add(_item);
           }
           return _result;

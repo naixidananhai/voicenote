@@ -1,0 +1,54 @@
+﻿Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+> Task :whisper-lib:preBuild UP-TO-DATE
+> Task :whisper-lib:preDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :whisper-lib:writeDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:generateDebugResources UP-TO-DATE
+> Task :whisper-lib:packageDebugResources UP-TO-DATE
+> Task :whisper-lib:extractDeepLinksDebug UP-TO-DATE
+> Task :whisper-lib:processDebugManifest UP-TO-DATE
+> Task :whisper-lib:compileDebugLibraryResources UP-TO-DATE
+> Task :whisper-lib:parseDebugLocalResources UP-TO-DATE
+> Task :whisper-lib:generateDebugRFile UP-TO-DATE
+> Task :whisper-lib:checkKotlinGradlePluginConfigurationErrors
+> Task :whisper-lib:compileDebugKotlin UP-TO-DATE
+> Task :whisper-lib:javaPreCompileDebug UP-TO-DATE
+> Task :whisper-lib:compileDebugJavaWithJavac NO-SOURCE
+> Task :whisper-lib:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin
+
+> Task :app:compileDebugKotlin
+w: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife/assistant/storage/StorageManager.kt:155:21 Variable 'recordings' is never used
+w: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife/assistant/ui/main/MainActivity.kt:46:9 Parameter 'permissions' is never used, could be renamed to _
+w: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife/assistant/vad/SileroVadEngine.kt:163:43 Unchecked cast: Any! to Array<Array<FloatArray>>
+w: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife/assistant/vad/SileroVadEngine.kt:164:43 Unchecked cast: Any! to Array<Array<FloatArray>>
+
+BUILD SUCCESSFUL in 9s
+27 actionable tasks: 4 executed, 23 up-to-date

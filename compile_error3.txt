@@ -1,0 +1,82 @@
+﻿Starting a Gradle Daemon, 2 stopped Daemons could not be reused, use --status for details
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven2' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven3' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+Build was configured to prefer settings repositories over project repositories but repository 'maven4' was added by initialization script 'C:\Users\yangyayuan\.gradle\init.gradle.kts'
+.\gradlew : Warning: SDK processing. This version only understands SDK XM
+L versions up to 3 but an SDK XML file of version 4 was encountered. This
+ can happen if you use versions of Android Studio and the command-line to
+ols that were released at different times.
+所在位置 行:1 字符: 1
++ .\gradlew :app:compileDebugKotlin 2>&1 | Out-File -FilePath compile_e .
+..
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: SDK pr...ifferent  
+   times.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+> Task :whisper-lib:preBuild UP-TO-DATE
+> Task :whisper-lib:preDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :whisper-lib:writeDebugAarMetadata UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :whisper-lib:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:generateDebugResources UP-TO-DATE
+> Task :whisper-lib:packageDebugResources UP-TO-DATE
+> Task :whisper-lib:extractDeepLinksDebug UP-TO-DATE
+> Task :whisper-lib:processDebugManifest UP-TO-DATE
+> Task :whisper-lib:compileDebugLibraryResources UP-TO-DATE
+> Task :whisper-lib:parseDebugLocalResources UP-TO-DATE
+> Task :whisper-lib:generateDebugRFile UP-TO-DATE
+> Task :whisper-lib:checkKotlinGradlePluginConfigurationErrors
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :whisper-lib:compileDebugKotlin UP-TO-DATE
+> Task :whisper-lib:javaPreCompileDebug UP-TO-DATE
+> Task :whisper-lib:compileDebugJavaWithJavac NO-SOURCE
+> Task :whisper-lib:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin
+
+> Task :app:compileDebugKotlin FAILED
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife
+/assistant/ui/main/MainActivity.kt:28:35 Unresolved reference: recordings
+e: file:///C:/Users/yangyayuan/Desktop/yu/app/src/main/java/com/voicelife
+/assistant/ui/main/MainActivity.kt:62:25 Unresolved reference: Recordings
+Screen
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.
+GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 54s
+27 actionable tasks: 4 executed, 23 up-to-date

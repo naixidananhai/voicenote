@@ -12,13 +12,14 @@ data class Recording(
     val fileSize: Long,  // 字节
     val createdAt: Long,  // Unix timestamp
     val transcriptionStatus: TranscriptionStatus = TranscriptionStatus.PENDING,
+    val transcriptionText: String? = null,  // 转录文本
     val transcribedAt: Long? = null,
     val deleteAt: Long  // 7天后删除
 )
 
 enum class TranscriptionStatus {
-    PENDING,
-    PROCESSING,
-    COMPLETED,
-    FAILED
+    PENDING,      // 待转录
+    PROCESSING,   // 转录中
+    COMPLETED,    // 已完成
+    FAILED        // 转录失败
 }

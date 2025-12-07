@@ -50,7 +50,20 @@ class RecordingRepository @Inject constructor(
     }
 
     /**
-     * 删除录音记录
+     * 删除录音记录（通过ID）
+     */
+    suspend fun deleteRecording(recordingId: Long) {
+        val recording = recordingDao.getById(recordingId) ?: return
+        
+        // 删除文件
+        File(recording.filePath).delete()
+
+        // 删除数据库记录
+        recordingDao.delete(recording)
+    }
+
+    /**
+     * 删除录音记录（通过对象）
      */
     suspend fun deleteRecording(recording: Recording) {
         // 删除文件
@@ -70,8 +83,18 @@ class RecordingRepository @Inject constructor(
     /**
      * 获取所有录音(Flow)
      */
-    fun getAllRecordings(): Flow<List<Recording>> {
+    fun getAllRecordingsFlow(): Flow<List<Recording>> {
         return recordingDao.getAllFlow()
+    }
+
+    /**
+     * 获取所有录音（一次性）
+     */
+    suspend fun getAllRecordings(): List<Recording> {
+        return recordingDao.getByStatus(TranscriptionStatus.COMPLETED) +
+                recordingDao.getByStatus(TranscriptionStatus.PENDING) +
+                recordingDao.getByStatus(TranscriptionStatus.PROCESSING) +
+                recordingDao.getByStatus(TranscriptionStatus.FAILED)
     }
 
     /**
@@ -104,6 +127,26 @@ class RecordingRepository @Inject constructor(
         )
 
         recordingDao.update(updated)
+    }
+
+    /**
+     * 更新转录文本
+     */
+    suspend fun updateTranscription(recordingId: Long, text: String) {
+        val recording = recordingDao.getById(recordingId) ?: return
+        val updated = recording.copy(
+            transcriptionText = text,
+            transcriptionStatus = TranscriptionStatus.COMPLETED,
+            transcribedAt = System.currentTimeMillis()
+        )
+        recordingDao.update(updated)
+    }
+
+    /**
+     * 获取失败的录音
+     */
+    suspend fun getFailedRecordings(): List<Recording> {
+        return recordingDao.getByStatus(TranscriptionStatus.FAILED)
     }
 
     /**
